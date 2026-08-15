@@ -7,6 +7,7 @@ import java.util.UUID;
 @Builder
 public record Course(
         UUID id,
+        Cursus cursus,
         String ref,
         String title,
         Integer credit

@@ -9,6 +9,7 @@ import java.util.UUID;
 @Builder
 public record Exam(
         UUID id,
-        Instant dateExam,
-        BigDecimal coefficient
+        Instant examDate,
+        BigDecimal coefficient,
+        Course course
 ) {}

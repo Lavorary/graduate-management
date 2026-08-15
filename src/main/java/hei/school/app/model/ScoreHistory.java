@@ -1,0 +1,15 @@
+package hei.school.app.model;
+
+import hei.school.app.enums.Reason;
+
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.UUID;
+
+public record ScoreHistory(
+        UUID id,
+        Grade grade,
+        BigDecimal score,
+        Instant gradedAt,
+        Reason reason,
+        String explanation) {}

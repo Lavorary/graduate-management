@@ -1,16 +1,9 @@
 package hei.school.app.model;
 
-import lombok.Builder;
-
 import java.sql.Timestamp;
 import java.util.UUID;
+import lombok.Builder;
 
 @Builder
 public record GroupMembership(
-        UUID id,
-        Timestamp startDate,
-        Timestamp endDate,
-        User user,
-        Group group
-
-) {}
+    UUID id, Timestamp startDate, Timestamp endDate, User user, Group group) {}

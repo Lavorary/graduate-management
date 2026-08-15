@@ -1,13 +1,7 @@
 package hei.school.app.model;
 
+import java.util.UUID;
 import lombok.Builder;
 
-import java.util.UUID;
-
 @Builder
-public record Cursus(
-       UUID id,
-       String name,
-       String description
-
-) {}
+public record Cursus(UUID id, String name, String description) {}

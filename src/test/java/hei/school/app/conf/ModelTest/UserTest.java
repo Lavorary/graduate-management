@@ -24,7 +24,8 @@ class UserTest {
 
   @Test
   void should_allow_null_last_name() {
-    User user = new User(UUID.randomUUID(), "Jean", null, Roles.TEACHER, "jean@hei.school", "hashed");
+    User user =
+        new User(UUID.randomUUID(), "Jean", null, Roles.TEACHER, "jean@hei.school", "hashed");
 
     assertThat(user.lastName()).isNull();
   }

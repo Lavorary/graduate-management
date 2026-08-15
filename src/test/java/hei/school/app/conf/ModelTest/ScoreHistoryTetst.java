@@ -2,8 +2,8 @@ package hei.school.app.conf.ModelTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import hei.school.app.model.Grade;
 import hei.school.app.enums.Reason;
+import hei.school.app.model.Grade;
 import hei.school.app.model.ScoreHistory;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -37,8 +37,10 @@ class ScoreHistoryTest {
   void should_be_equal_when_all_fields_match() {
     UUID id = UUID.randomUUID();
     Timestamp gradedAt = Timestamp.valueOf("2026-06-20 10:00:00");
-    ScoreHistory s1 = new ScoreHistory(id, null, new BigDecimal("14.50"), gradedAt, Reason.OTHER, "x");
-    ScoreHistory s2 = new ScoreHistory(id, null, new BigDecimal("14.50"), gradedAt, Reason.OTHER, "x");
+    ScoreHistory s1 =
+        new ScoreHistory(id, null, new BigDecimal("14.50"), gradedAt, Reason.OTHER, "x");
+    ScoreHistory s2 =
+        new ScoreHistory(id, null, new BigDecimal("14.50"), gradedAt, Reason.OTHER, "x");
 
     assertThat(s1).isEqualTo(s2);
     assertThat(s1.hashCode()).isEqualTo(s2.hashCode());

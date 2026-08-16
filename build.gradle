@@ -158,6 +158,12 @@ runtimeOnly 'org.postgresql:postgresql'
 implementation 'me.paulschwarz:spring-dotenv:4.0.0'
 implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 implementation "org.jetbrains.kotlin:kotlin-stdlib"
+implementation 'org.springframework.boot:spring-boot-starter-security'
+implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+implementation 'org.bouncycastle:bcpkix-jdk18on:1.78.1'
 
 implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 }

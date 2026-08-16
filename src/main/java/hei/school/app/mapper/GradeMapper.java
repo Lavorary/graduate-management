@@ -1,11 +1,9 @@
 package hei.school.app.mapper;
 
-import java.util.List;
-
-import org.mapstruct.Mapper;
-
 import hei.school.app.model.Grade;
 import hei.school.app.repository.model.JGrade;
+import java.util.List;
+import org.mapstruct.Mapper;
 
 @Mapper(
     componentModel = "spring",

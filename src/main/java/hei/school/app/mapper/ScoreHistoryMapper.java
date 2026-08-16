@@ -1,11 +1,9 @@
 package hei.school.app.mapper;
 
-import java.util.List;
-
-import org.mapstruct.Mapper;
-
 import hei.school.app.model.ScoreHistory;
 import hei.school.app.repository.model.JScoreHistory;
+import java.util.List;
+import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = GradeMapper.class)
 public interface ScoreHistoryMapper {

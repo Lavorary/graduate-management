@@ -1,13 +1,12 @@
 package hei.school.app.conf;
 
+import hei.school.app.mapper.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import hei.school.app.mapper.*;
-
 @Configuration
 public class MapperTestConfig {
-    @Bean
+  @Bean
   public UserMapper userMapper() {
     return new UserMapperImpl();
   }

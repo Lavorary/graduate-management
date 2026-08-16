@@ -1,11 +1,9 @@
 package hei.school.app.mapper;
 
-import java.util.List;
-
-import org.mapstruct.Mapper;
-
 import hei.school.app.model.Group;
 import hei.school.app.repository.model.JGroup;
+import java.util.List;
+import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = CursusMapper.class)
 public interface GroupMapper {

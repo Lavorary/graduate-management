@@ -1,11 +1,9 @@
 package hei.school.app.mapper;
 
-import java.util.List;
-
-import org.mapstruct.Mapper;
-
 import hei.school.app.model.Cursus;
 import hei.school.app.repository.model.JCursus;
+import java.util.List;
+import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface CursusMapper {

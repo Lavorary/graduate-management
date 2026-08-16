@@ -1,11 +1,9 @@
 package hei.school.app.mapper;
 
-import java.util.List;
-
-import org.mapstruct.Mapper;
-
 import hei.school.app.model.Exam;
 import hei.school.app.repository.model.JExam;
+import java.util.List;
+import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = CourseMapper.class)
 public interface ExamMapper {

@@ -25,7 +25,9 @@ class GroupRepositoryTest extends FacadeIT {
 
   @Test
   void should_find_by_cursus_id() {
-    JCursus cursus = cursusRepository.save(JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JCursus cursus =
+        cursusRepository.save(
+            JCursus.builder().name("DevLog").description("d").year("2026").build());
     groupRepository.save(JGroup.builder().ref("GROUPE-A").cursus(Set.of(cursus)).build());
 
     assertThat(groupRepository.findByCursus_Id(cursus.getId())).hasSize(1);

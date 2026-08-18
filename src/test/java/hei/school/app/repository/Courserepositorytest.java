@@ -22,23 +22,31 @@ class CourseRepositoryTest extends FacadeIT {
 
   @Test
   void should_find_by_ref() {
-    JCursus cursus = cursusRepository.save(JCursus.builder().name("DevLog").description("d").year("2026").build());
-    courseRepository.save(JCourse.builder().cursus(cursus).ref("ALG101").title("Algorithmique").credit(5).build());
+    JCursus cursus =
+        cursusRepository.save(
+            JCursus.builder().name("DevLog").description("d").year("2026").build());
+    courseRepository.save(
+        JCourse.builder().cursus(cursus).ref("ALG101").title("Algorithmique").credit(5).build());
 
     assertThat(courseRepository.findByRef("ALG101")).isPresent();
   }
 
   @Test
   void should_find_by_cursus_id() {
-    JCursus cursus = cursusRepository.save(JCursus.builder().name("DevLog").description("d").year("2026").build());
-    courseRepository.save(JCourse.builder().cursus(cursus).ref("ALG101").title("Algorithmique").credit(5).build());
+    JCursus cursus =
+        cursusRepository.save(
+            JCursus.builder().name("DevLog").description("d").year("2026").build());
+    courseRepository.save(
+        JCourse.builder().cursus(cursus).ref("ALG101").title("Algorithmique").credit(5).build());
 
     assertThat(courseRepository.findByCursusId(cursus.getId())).hasSize(1);
   }
 
   @Test
   void should_find_by_teacher_id() {
-    JCursus cursus = cursusRepository.save(JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JCursus cursus =
+        cursusRepository.save(
+            JCursus.builder().name("DevLog").description("d").year("2026").build());
     JUser teacher =
         userRepository.save(
             JUser.builder()

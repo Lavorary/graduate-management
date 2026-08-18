@@ -28,12 +28,21 @@ class GradeRepositoryTest extends FacadeIT {
 
   private JUser saveUser(String email, UserRole role) {
     return userRepository.save(
-        JUser.builder().id(UUID.randomUUID()).firstName("A").lastName("B").role(role).email(email).password("x").build());
+        JUser.builder()
+            .id(UUID.randomUUID())
+            .firstName("A")
+            .lastName("B")
+            .role(role)
+            .email(email)
+            .password("x")
+            .build());
   }
 
   @Test
   void should_find_by_student_id_and_graded_by_and_exam_id() {
-    JCursus cursus = cursusRepository.save(JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JCursus cursus =
+        cursusRepository.save(
+            JCursus.builder().name("DevLog").description("d").year("2026").build());
     JUser teacher = saveUser("teacher@hei.school", UserRole.TEACHER);
     JCourse course =
         courseRepository.save(
@@ -46,10 +55,16 @@ class GradeRepositoryTest extends FacadeIT {
                 .build());
     JExam exam =
         examRepository.save(
-            JExam.builder().examDate(Instant.parse("2026-06-15T09:00:00Z")).coefficient(new BigDecimal("2.5")).course(course).build());
+            JExam.builder()
+                .examDate(Instant.parse("2026-06-15T09:00:00Z"))
+                .coefficient(new BigDecimal("2.5"))
+                .course(course)
+                .build());
     JUser student = saveUser("student@hei.school", UserRole.STUDENT);
 
-    JGrade grade = gradeRepository.save(JGrade.builder().exam(exam).student(student).gradedBy(teacher).build());
+    JGrade grade =
+        gradeRepository.save(
+            JGrade.builder().exam(exam).student(student).gradedBy(teacher).build());
 
     assertThat(gradeRepository.findByStudent_Id(student.getId())).containsExactly(grade);
     assertThat(gradeRepository.findByExam_Id(exam.getId())).containsExactly(grade);

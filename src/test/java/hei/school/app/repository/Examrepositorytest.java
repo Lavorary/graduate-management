@@ -21,11 +21,23 @@ class ExamRepositoryTest extends FacadeIT {
 
   @Test
   void should_find_by_course_id() {
-    JCursus cursus = cursusRepository.save(JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JCursus cursus =
+        cursusRepository.save(
+            JCursus.builder().name("DevLog").description("d").year("2026").build());
     JCourse course =
-        courseRepository.save(JCourse.builder().cursus(cursus).ref("ALG101").title("Algorithmique").credit(5).build());
+        courseRepository.save(
+            JCourse.builder()
+                .cursus(cursus)
+                .ref("ALG101")
+                .title("Algorithmique")
+                .credit(5)
+                .build());
     examRepository.save(
-        JExam.builder().examDate(Instant.parse("2026-06-15T09:00:00Z")).coefficient(new BigDecimal("2.5")).course(course).build());
+        JExam.builder()
+            .examDate(Instant.parse("2026-06-15T09:00:00Z"))
+            .coefficient(new BigDecimal("2.5"))
+            .course(course)
+            .build());
 
     assertThat(examRepository.findByCourseId(course.getId())).hasSize(1);
   }

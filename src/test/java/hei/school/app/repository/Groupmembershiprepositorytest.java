@@ -46,9 +46,14 @@ class GroupMembershipRepositoryTest extends FacadeIT {
             .endDate(LocalDate.of(2024, 1, 1))
             .build());
     groupMembershipRepository.save(
-        JGroupMembership.builder().student(student).group(groupB).startDate(LocalDate.of(2024, 1, 1)).build());
+        JGroupMembership.builder()
+            .student(student)
+            .group(groupB)
+            .startDate(LocalDate.of(2024, 1, 1))
+            .build());
 
-    assertThat(groupMembershipRepository.findByStudentIdOrderByStartDateAsc(student.getId())).hasSize(2);
+    assertThat(groupMembershipRepository.findByStudentIdOrderByStartDateAsc(student.getId()))
+        .hasSize(2);
   }
 
   @Test
@@ -57,7 +62,11 @@ class GroupMembershipRepositoryTest extends FacadeIT {
     JGroup group = groupRepository.save(JGroup.builder().ref("GROUPE-A").build());
 
     groupMembershipRepository.save(
-        JGroupMembership.builder().student(student).group(group).startDate(LocalDate.of(2023, 9, 1)).build());
+        JGroupMembership.builder()
+            .student(student)
+            .group(group)
+            .startDate(LocalDate.of(2023, 9, 1))
+            .build());
 
     assertThat(groupMembershipRepository.findByStudentIdAndEndDateIsNull(student.getId()));
   }

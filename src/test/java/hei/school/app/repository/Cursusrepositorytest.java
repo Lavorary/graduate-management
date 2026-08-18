@@ -17,7 +17,11 @@ class CursusRepositoryTest extends FacadeIT {
   void should_save_and_find_cursus_by_id() {
     JCursus cursus =
         cursusRepository.save(
-            JCursus.builder().name("Développement Logiciel").description("Cursus ingénieur").year("2026").build());
+            JCursus.builder()
+                .name("Développement Logiciel")
+                .description("Cursus ingénieur")
+                .year("2026")
+                .build());
 
     assertThat(cursusRepository.findById(cursus.getId())).isPresent();
     assertThat(cursusRepository.findById(cursus.getId()).get().getName())
@@ -29,6 +33,8 @@ class CursusRepositoryTest extends FacadeIT {
     cursusRepository.save(JCursus.builder().name("DevLog A").description("d").year("2026").build());
     cursusRepository.save(JCursus.builder().name("DevLog B").description("d").year("2027").build());
 
-    assertThat(cursusRepository.findByYear("2026")).extracting(JCursus::getName).containsExactly("DevLog A");
+    assertThat(cursusRepository.findByYear("2026"))
+        .extracting(JCursus::getName)
+        .containsExactly("DevLog A");
   }
 }

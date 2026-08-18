@@ -52,6 +52,8 @@ class UserRepositoryTest extends FacadeIT {
             .password("x")
             .build());
 
-    assertThat(userRepository.findByRole(UserRole.TEACHER)).extracting(JUser::getEmail).containsExactly("marie@hei.school");
+    assertThat(userRepository.findByRole(UserRole.TEACHER))
+        .extracting(JUser::getEmail)
+        .containsExactly("marie@hei.school");
   }
 }

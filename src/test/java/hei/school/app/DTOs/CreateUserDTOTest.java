@@ -8,9 +8,10 @@ import org.junit.jupiter.api.Test;
 
 class CreateUserDTOTest extends FacadeIT {
 
-    @Test
-    void should_build_create_user_dto_with_builder() {
-        CreateUserDTO dto = CreateUserDTO.builder()
+  @Test
+  void should_build_create_user_dto_with_builder() {
+    CreateUserDTO dto =
+        CreateUserDTO.builder()
             .firstName("John")
             .lastName("Doe")
             .role(UserRole.STUDENT)
@@ -18,17 +19,18 @@ class CreateUserDTOTest extends FacadeIT {
             .password("password123")
             .build();
 
-        assertThat(dto).isNotNull();
-        assertThat(dto.firstName()).isEqualTo("John");
-        assertThat(dto.lastName()).isEqualTo("Doe");
-        assertThat(dto.role()).isEqualTo(UserRole.STUDENT);
-        assertThat(dto.email()).isEqualTo("john@hei.school");
-        assertThat(dto.password()).isEqualTo("password123");
-    }
+    assertThat(dto).isNotNull();
+    assertThat(dto.firstName()).isEqualTo("John");
+    assertThat(dto.lastName()).isEqualTo("Doe");
+    assertThat(dto.role()).isEqualTo(UserRole.STUDENT);
+    assertThat(dto.email()).isEqualTo("john@hei.school");
+    assertThat(dto.password()).isEqualTo("password123");
+  }
 
-    @Test
-    void should_create_create_user_dto_for_teacher() {
-        CreateUserDTO dto = CreateUserDTO.builder()
+  @Test
+  void should_create_create_user_dto_for_teacher() {
+    CreateUserDTO dto =
+        CreateUserDTO.builder()
             .firstName("Jane")
             .lastName("Smith")
             .role(UserRole.TEACHER)
@@ -36,13 +38,14 @@ class CreateUserDTOTest extends FacadeIT {
             .password("securePass")
             .build();
 
-        assertThat(dto.role()).isEqualTo(UserRole.TEACHER);
-        assertThat(dto.email()).isEqualTo("jane@hei.school");
-    }
+    assertThat(dto.role()).isEqualTo(UserRole.TEACHER);
+    assertThat(dto.email()).isEqualTo("jane@hei.school");
+  }
 
-    @Test
-    void should_create_create_user_dto_for_admin() {
-        CreateUserDTO dto = CreateUserDTO.builder()
+  @Test
+  void should_create_create_user_dto_for_admin() {
+    CreateUserDTO dto =
+        CreateUserDTO.builder()
             .firstName("Admin")
             .lastName("User")
             .role(UserRole.ADMIN)
@@ -50,6 +53,6 @@ class CreateUserDTOTest extends FacadeIT {
             .password("adminPass")
             .build();
 
-        assertThat(dto.role()).isEqualTo(UserRole.ADMIN);
-    }
+    assertThat(dto.role()).isEqualTo(UserRole.ADMIN);
+  }
 }

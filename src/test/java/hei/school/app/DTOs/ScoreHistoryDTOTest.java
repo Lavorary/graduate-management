@@ -28,52 +28,47 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 class ScoreHistoryDTOTest extends FacadeIT {
 
-    @Autowired
-    private ScoreHistoryRepository scoreHistoryRepository;
+  @Autowired private ScoreHistoryRepository scoreHistoryRepository;
 
-    @Autowired
-    private GradeRepository gradeRepository;
+  @Autowired private GradeRepository gradeRepository;
 
-    @Autowired
-    private ExamRepository examRepository;
+  @Autowired private ExamRepository examRepository;
 
-    @Autowired
-    private CourseRepository courseRepository;
+  @Autowired private CourseRepository courseRepository;
 
-    @Autowired
-    private CursusRepository cursusRepository;
+  @Autowired private CursusRepository cursusRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+  @Autowired private UserRepository userRepository;
 
-    @Test
-    void should_create_score_history_dto_from_entity() {
-        JCursus cursus = cursusRepository.save(
+  @Test
+  void should_create_score_history_dto_from_entity() {
+    JCursus cursus =
+        cursusRepository.save(
             JCursus.builder()
                 .name("DevLog")
                 .description("Development and Logistics")
                 .year("2026")
-                .build()
-        );
+                .build());
 
-        JCourse course = courseRepository.save(
+    JCourse course =
+        courseRepository.save(
             JCourse.builder()
                 .cursus(cursus)
                 .ref("ALG101")
                 .title("Algorithmique")
                 .credit(5)
-                .build()
-        );
+                .build());
 
-        JExam exam = examRepository.save(
+    JExam exam =
+        examRepository.save(
             JExam.builder()
                 .examDate(Instant.parse("2026-06-15T09:00:00Z"))
                 .coefficient(new BigDecimal("2.5"))
                 .course(course)
-                .build()
-        );
+                .build());
 
-        JUser student = userRepository.save(
+    JUser student =
+        userRepository.save(
             JUser.builder()
                 .id(UUID.randomUUID())
                 .firstName("Student")
@@ -81,10 +76,10 @@ class ScoreHistoryDTOTest extends FacadeIT {
                 .role(UserRole.STUDENT)
                 .email("student@hei.school")
                 .password("x")
-                .build()
-        );
+                .build());
 
-        JUser teacher = userRepository.save(
+    JUser teacher =
+        userRepository.save(
             JUser.builder()
                 .id(UUID.randomUUID())
                 .firstName("Teacher")
@@ -92,27 +87,23 @@ class ScoreHistoryDTOTest extends FacadeIT {
                 .role(UserRole.TEACHER)
                 .email("teacher@hei.school")
                 .password("x")
-                .build()
-        );
+                .build());
 
-        JGrade grade = gradeRepository.save(
-            JGrade.builder()
-                .exam(exam)
-                .student(student)
-                .gradedBy(teacher)
-                .build()
-        );
+    JGrade grade =
+        gradeRepository.save(
+            JGrade.builder().exam(exam).student(student).gradedBy(teacher).build());
 
-        JScoreHistory saved = scoreHistoryRepository.save(
+    JScoreHistory saved =
+        scoreHistoryRepository.save(
             JScoreHistory.builder()
                 .grade(grade)
                 .score(new BigDecimal("8.00"))
                 .reason(Reason.INITIAL)
                 .explanation("Première correction")
-                .build()
-        );
+                .build());
 
-        ScoreHistoryDTO dto = ScoreHistoryDTO.builder()
+    ScoreHistoryDTO dto =
+        ScoreHistoryDTO.builder()
             .id(saved.getId())
             .gradeId(saved.getGrade().getId())
             .score(saved.getScore())
@@ -121,23 +112,24 @@ class ScoreHistoryDTOTest extends FacadeIT {
             .explanation(saved.getExplanation())
             .build();
 
-        assertThat(dto).isNotNull();
-        assertThat(dto.id()).isEqualTo(saved.getId());
-        assertThat(dto.gradeId()).isEqualTo(grade.getId());
-        assertThat(dto.score()).isEqualTo(new BigDecimal("8.00"));
-        assertThat(dto.reason()).isEqualTo(Reason.INITIAL);
-        assertThat(dto.explanation()).isEqualTo("Première correction");
-        // Just check that gradedAt exists, don't be strict about it being non-null
-        // since it might be null if the test runs fast and the timestamp isn't set yet
-    }
+    assertThat(dto).isNotNull();
+    assertThat(dto.id()).isEqualTo(saved.getId());
+    assertThat(dto.gradeId()).isEqualTo(grade.getId());
+    assertThat(dto.score()).isEqualTo(new BigDecimal("8.00"));
+    assertThat(dto.reason()).isEqualTo(Reason.INITIAL);
+    assertThat(dto.explanation()).isEqualTo("Première correction");
+    // Just check that gradedAt exists, don't be strict about it being non-null
+    // since it might be null if the test runs fast and the timestamp isn't set yet
+  }
 
-    @Test
-    void should_build_score_history_dto_with_builder() {
-        UUID id = UUID.randomUUID();
-        UUID gradeId = UUID.randomUUID();
-        Instant gradedAt = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+  @Test
+  void should_build_score_history_dto_with_builder() {
+    UUID id = UUID.randomUUID();
+    UUID gradeId = UUID.randomUUID();
+    Instant gradedAt = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-        ScoreHistoryDTO dto = ScoreHistoryDTO.builder()
+    ScoreHistoryDTO dto =
+        ScoreHistoryDTO.builder()
             .id(id)
             .gradeId(gradeId)
             .score(new BigDecimal("12.00"))
@@ -146,11 +138,11 @@ class ScoreHistoryDTOTest extends FacadeIT {
             .explanation("Réclamation acceptée")
             .build();
 
-        assertThat(dto.id()).isEqualTo(id);
-        assertThat(dto.gradeId()).isEqualTo(gradeId);
-        assertThat(dto.score()).isEqualTo(new BigDecimal("12.00"));
-        assertThat(dto.gradedAt()).isEqualTo(gradedAt);
-        assertThat(dto.reason()).isEqualTo(Reason.CORRECTION);
-        assertThat(dto.explanation()).isEqualTo("Réclamation acceptée");
-    }
+    assertThat(dto.id()).isEqualTo(id);
+    assertThat(dto.gradeId()).isEqualTo(gradeId);
+    assertThat(dto.score()).isEqualTo(new BigDecimal("12.00"));
+    assertThat(dto.gradedAt()).isEqualTo(gradedAt);
+    assertThat(dto.reason()).isEqualTo(Reason.CORRECTION);
+    assertThat(dto.explanation()).isEqualTo("Réclamation acceptée");
+  }
 }

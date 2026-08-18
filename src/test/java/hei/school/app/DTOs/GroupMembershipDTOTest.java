@@ -19,18 +19,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 class GroupMembershipDTOTest extends FacadeIT {
 
-    @Autowired
-    private GroupMembershipRepository groupMembershipRepository;
+  @Autowired private GroupMembershipRepository groupMembershipRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+  @Autowired private UserRepository userRepository;
 
-    @Autowired
-    private GroupRepository groupRepository;
+  @Autowired private GroupRepository groupRepository;
 
-    @Test
-    void should_create_group_membership_dto_from_entity() {
-        JUser student = userRepository.save(
+  @Test
+  void should_create_group_membership_dto_from_entity() {
+    JUser student =
+        userRepository.save(
             JUser.builder()
                 .id(UUID.randomUUID())
                 .firstName("Student")
@@ -38,27 +36,23 @@ class GroupMembershipDTOTest extends FacadeIT {
                 .role(UserRole.STUDENT)
                 .email("student@hei.school")
                 .password("x")
-                .build()
-        );
+                .build());
 
-        JGroup group = groupRepository.save(
-            JGroup.builder()
-                .ref("G1")
-                .build()
-        );
+    JGroup group = groupRepository.save(JGroup.builder().ref("G1").build());
 
-        LocalDate startDate = LocalDate.now();
+    LocalDate startDate = LocalDate.now();
 
-        JGroupMembership saved = groupMembershipRepository.save(
+    JGroupMembership saved =
+        groupMembershipRepository.save(
             JGroupMembership.builder()
                 .student(student)
                 .group(group)
                 .startDate(startDate)
                 .endDate(null)
-                .build()
-        );
+                .build());
 
-        GroupMembershipDTO dto = GroupMembershipDTO.builder()
+    GroupMembershipDTO dto =
+        GroupMembershipDTO.builder()
             .id(saved.getId())
             .startDate(saved.getStartDate())
             .endDate(saved.getEndDate())
@@ -66,23 +60,24 @@ class GroupMembershipDTOTest extends FacadeIT {
             .groupId(saved.getGroup().getId())
             .build();
 
-        assertThat(dto).isNotNull();
-        assertThat(dto.id()).isEqualTo(saved.getId());
-        assertThat(dto.startDate()).isEqualTo(startDate);
-        assertThat(dto.endDate()).isNull();
-        assertThat(dto.studentId()).isEqualTo(student.getId());
-        assertThat(dto.groupId()).isEqualTo(group.getId());
-    }
+    assertThat(dto).isNotNull();
+    assertThat(dto.id()).isEqualTo(saved.getId());
+    assertThat(dto.startDate()).isEqualTo(startDate);
+    assertThat(dto.endDate()).isNull();
+    assertThat(dto.studentId()).isEqualTo(student.getId());
+    assertThat(dto.groupId()).isEqualTo(group.getId());
+  }
 
-    @Test
-    void should_build_group_membership_dto_with_builder() {
-        UUID id = UUID.randomUUID();
-        UUID studentId = UUID.randomUUID();
-        UUID groupId = UUID.randomUUID();
-        LocalDate startDate = LocalDate.now();
-        LocalDate endDate = LocalDate.now().plusMonths(6);
+  @Test
+  void should_build_group_membership_dto_with_builder() {
+    UUID id = UUID.randomUUID();
+    UUID studentId = UUID.randomUUID();
+    UUID groupId = UUID.randomUUID();
+    LocalDate startDate = LocalDate.now();
+    LocalDate endDate = LocalDate.now().plusMonths(6);
 
-        GroupMembershipDTO dto = GroupMembershipDTO.builder()
+    GroupMembershipDTO dto =
+        GroupMembershipDTO.builder()
             .id(id)
             .startDate(startDate)
             .endDate(endDate)
@@ -90,10 +85,10 @@ class GroupMembershipDTOTest extends FacadeIT {
             .groupId(groupId)
             .build();
 
-        assertThat(dto.id()).isEqualTo(id);
-        assertThat(dto.startDate()).isEqualTo(startDate);
-        assertThat(dto.endDate()).isEqualTo(endDate);
-        assertThat(dto.studentId()).isEqualTo(studentId);
-        assertThat(dto.groupId()).isEqualTo(groupId);
-    }
+    assertThat(dto.id()).isEqualTo(id);
+    assertThat(dto.startDate()).isEqualTo(startDate);
+    assertThat(dto.endDate()).isEqualTo(endDate);
+    assertThat(dto.studentId()).isEqualTo(studentId);
+    assertThat(dto.groupId()).isEqualTo(groupId);
+  }
 }

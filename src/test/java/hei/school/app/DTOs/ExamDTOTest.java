@@ -19,62 +19,66 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 class ExamDTOTest extends FacadeIT {
 
-    @Autowired
-    private ExamRepository examRepository;
+  @Autowired private ExamRepository examRepository;
 
-    @Autowired
-    private CourseRepository courseRepository;
+  @Autowired private CourseRepository courseRepository;
 
-    @Autowired
-    private CursusRepository cursusRepository;
+  @Autowired private CursusRepository cursusRepository;
 
-    @Test
-    void should_create_exam_dto_from_entity() {
-        JCursus cursus = cursusRepository.save(
-            JCursus.builder().name("DevLog").description("d").year("2026").build()
-        );
-        JCourse course = courseRepository.save(
-            JCourse.builder().cursus(cursus).ref("ALG101").title("Algorithmique").credit(5).build()
-        );
+  @Test
+  void should_create_exam_dto_from_entity() {
+    JCursus cursus =
+        cursusRepository.save(
+            JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JCourse course =
+        courseRepository.save(
+            JCourse.builder()
+                .cursus(cursus)
+                .ref("ALG101")
+                .title("Algorithmique")
+                .credit(5)
+                .build());
 
-        JExam saved = examRepository.save(
+    JExam saved =
+        examRepository.save(
             JExam.builder()
                 .examDate(Instant.parse("2026-06-15T09:00:00Z"))
                 .coefficient(new BigDecimal("2.5"))
                 .course(course)
-                .build()
-        );
+                .build());
 
-        ExamDTO dto = ExamDTO.builder()
+    ExamDTO dto =
+        ExamDTO.builder()
             .id(saved.getId())
             .examDate(saved.getExamDate())
             .coefficient(saved.getCoefficient())
             .courseId(saved.getCourse().getId())
             .build();
 
-        assertThat(dto).isNotNull();
-        assertThat(dto.id()).isEqualTo(saved.getId());
-        assertThat(dto.examDate()).isEqualTo(Instant.parse("2026-06-15T09:00:00Z"));
-        assertThat(dto.coefficient()).isEqualTo(new BigDecimal("2.5"));
-        assertThat(dto.courseId()).isEqualTo(course.getId());
-    }
+    assertThat(dto).isNotNull();
+    assertThat(dto.id()).isEqualTo(saved.getId());
+    assertThat(dto.examDate()).isEqualTo(Instant.parse("2026-06-15T09:00:00Z"));
+    assertThat(dto.coefficient()).isEqualTo(new BigDecimal("2.5"));
+    assertThat(dto.courseId()).isEqualTo(course.getId());
+  }
 
-    @Test
-    void should_build_exam_dto_with_builder() {
-        UUID id = UUID.randomUUID();
-        UUID courseId = UUID.randomUUID();
-        Instant examDate = Instant.now();
+  @Test
+  void should_build_exam_dto_with_builder() {
+    UUID id = UUID.randomUUID();
+    UUID courseId = UUID.randomUUID();
+    Instant examDate = Instant.now();
 
-        ExamDTO dto = ExamDTO.builder()
+    ExamDTO dto =
+        ExamDTO.builder()
             .id(id)
             .examDate(examDate)
             .coefficient(new BigDecimal("1.5"))
             .courseId(courseId)
             .build();
 
-        assertThat(dto.id()).isEqualTo(id);
-        assertThat(dto.examDate()).isEqualTo(examDate);
-        assertThat(dto.coefficient()).isEqualTo(new BigDecimal("1.5"));
-        assertThat(dto.courseId()).isEqualTo(courseId);
-    }
+    assertThat(dto.id()).isEqualTo(id);
+    assertThat(dto.examDate()).isEqualTo(examDate);
+    assertThat(dto.coefficient()).isEqualTo(new BigDecimal("1.5"));
+    assertThat(dto.courseId()).isEqualTo(courseId);
+  }
 }

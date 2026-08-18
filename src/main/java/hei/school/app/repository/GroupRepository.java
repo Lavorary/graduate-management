@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface GroupRepository extends JpaRepository<JGroup, UUID> {
   Optional<JGroup> findByRef(String ref);
 
-  List<JGroup> findByCursus_id(UUID cursusId);
+  List<JGroup> findByCursus_Id(UUID cursusId);
 }

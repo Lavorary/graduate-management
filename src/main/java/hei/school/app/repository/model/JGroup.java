@@ -22,7 +22,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "group")
+@Table(name = "\"group\"")
 @Builder
 public class JGroup {
   @Id

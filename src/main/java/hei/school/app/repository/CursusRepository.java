@@ -6,6 +6,5 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CursusRepository extends JpaRepository<JCursus, UUID> {
-
   List<JCursus> findByYear(String year);
 }

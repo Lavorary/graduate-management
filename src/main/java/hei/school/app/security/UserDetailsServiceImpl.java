@@ -20,6 +20,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         userRepository
             .findByEmail(email)
             .orElseThrow(() -> new UsernameNotFoundException("No user with email: " + email));
+    if (jUser.getPassword() == null) {
+      throw new UsernameNotFoundException("User account is corrupted: " + email);
+    }
     return new Principal(userMapper.toModel(jUser));
   }
 }

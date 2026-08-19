@@ -1,11 +1,12 @@
 package hei.school.app.exception;
 
-import java.nio.file.AccessDeniedException;
 import java.time.Instant;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,7 +18,7 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(AccessDeniedException.class)
   public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException ex) {
-    return build(HttpStatus.FORBIDDEN, ex.getMessage());
+    return build(HttpStatus.FORBIDDEN, "Access denied: " + ex.getMessage());
   }
 
   @ExceptionHandler({UsernameNotFoundException.class, ResourceNotFoundException.class})
@@ -42,6 +43,11 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponse> handleGeneric(Exception ex) {
     return build(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error occurred");
+  }
+
+  @ExceptionHandler(AuthenticationException.class)
+  public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex) {
+    return build(HttpStatus.UNAUTHORIZED, "Authentication failed: " + ex.getMessage());
   }
 
   private ResponseEntity<ErrorResponse> build(HttpStatus status, String message) {

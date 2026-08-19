@@ -7,6 +7,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +19,10 @@ public class JwtService {
   public JwtService(
       @Value("${jwt.secret}") String secret,
       @Value("${jwt.expiration-ms:3600000}") long expirationMs) {
-    this.key = Keys.hmacShaKeyFor(secret.getBytes());
+    if (secret.getBytes(StandardCharsets.UTF_8).length < 32) {
+      throw new IllegalArgumentException("JWT secret must be at least 32 bytes");
+    }
+    this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     this.expirationMs = expirationMs;
   }
 

@@ -5,7 +5,6 @@ import hei.school.app.security.authorizer.ExamAccessAuthorizationManager;
 import hei.school.app.security.authorizer.GradeAccessAuthorizationManager;
 import hei.school.app.security.authorizer.StudentAccessAuthorizationManager;
 import hei.school.app.security.jwt.JwtAuthFilter;
-import hei.school.app.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,8 +28,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+  private final JwtAuthFilter jwtAuthFilter;
   private final UserDetailsService userDetailsService;
-  private final JwtService jwtService;
   private final CourseAccessAuthorizationManager courseAccessAuthorizationManager;
   private final ExamAccessAuthorizationManager examAccessAuthorizationManager;
   private final GradeAccessAuthorizationManager gradeAccessAuthorizationManager;
@@ -71,9 +70,7 @@ public class SecurityConfig {
                     .anyRequest()
                     .authenticated())
         .authenticationProvider(authenticationProvider())
-        .addFilterBefore(
-            new JwtAuthFilter(jwtService, userDetailsService),
-            UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }

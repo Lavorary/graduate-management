@@ -14,6 +14,7 @@ import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -24,6 +25,7 @@ public class StudentAccessAuthorizationManager
   private final GroupMembershipRepository groupMembershipRepository;
 
   @Override
+  @Transactional(readOnly = true)
   public AuthorizationDecision check(
       Supplier<Authentication> authenticationSupplier, RequestAuthorizationContext context) {
     var authentication = authenticationSupplier.get();

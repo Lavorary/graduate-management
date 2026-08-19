@@ -8,6 +8,9 @@ import hei.school.app.repository.model.JCursus;
 import hei.school.app.repository.model.JExam;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,4 +44,59 @@ class ExamRepositoryTest extends FacadeIT {
 
     assertThat(examRepository.findByCourseId(course.getId())).hasSize(1);
   }
+
+  @Test
+  void should_find_course_id_by_exam_id() {
+    JCursus cursus =
+        cursusRepository.save(
+            JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JCourse course =
+        courseRepository.save(
+            JCourse.builder()
+                .cursus(cursus)
+                .ref("ALG101")
+                .title("Algorithmique")
+                .credit(5)
+                .build());
+    JExam exam =
+        examRepository.save(
+            JExam.builder()
+                .examDate(Instant.parse("2026-06-15T09:00:00Z"))
+                .coefficient(new BigDecimal("2.5"))
+                .course(course)
+                .build());
+
+    Optional<UUID> result = examRepository.findCourseIdByExamId(exam.getId());
+
+    assertThat(result).isPresent();
+    assertThat(result.get()).isEqualTo(course.getId());
+  }
+
+   @Test
+  void should_find_cursus_id_by_exam_id() {
+    JCursus cursus =
+        cursusRepository.save(
+            JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JCourse course =
+        courseRepository.save(
+            JCourse.builder()
+                .cursus(cursus)
+                .ref("ALG101")
+                .title("Algorithmique")
+                .credit(5)
+                .build());
+    JExam exam =
+        examRepository.save(
+            JExam.builder()
+                .examDate(Instant.parse("2026-06-15T09:00:00Z"))
+                .coefficient(new BigDecimal("2.5"))
+                .course(course)
+                .build());
+
+    Optional<UUID> result = examRepository.findCursusIdByExamId(exam.getId());
+
+    assertThat(result).isPresent();
+    assertThat(result.get()).isEqualTo(cursus.getId());
+  }
+
 }

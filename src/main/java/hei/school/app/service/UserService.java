@@ -42,7 +42,8 @@ public class UserService {
     JUser entity =
         userRepository
             .findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("User with id : " + id + "  not found"));
+            .orElseThrow(
+                () -> new IllegalArgumentException("User with id : " + id + "  not found"));
     return toDto(entity);
   }
 
@@ -50,14 +51,14 @@ public class UserService {
     JUser entity =
         userRepository
             .findByEmail(email)
-            .orElseThrow(() -> new IllegalArgumentException("User with Id : " + email + " not found"));
+            .orElseThrow(
+                () -> new IllegalArgumentException("User with Id : " + email + " not found"));
     return toDto(entity);
   }
 
   public List<UserDTO> findByRole(UserRole role) {
     return userRepository.findByRole(role).stream().map(this::toDto).toList();
   }
-
 
   private UserDTO toDto(JUser entity) {
     User model = userMapper.toModel(entity);

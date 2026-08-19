@@ -41,11 +41,19 @@ class ScoreHistoryServiceTest {
   @InjectMocks private ScoreHistoryService scoreHistoryService;
 
   private Grade createGradeModel(UUID id) {
-    Course course = new Course(UUID.randomUUID(),
-        new Cursus(UUID.randomUUID(), "CS", "desc", "2024"), "REF", "Title", 5, null);
+    Course course =
+        new Course(
+            UUID.randomUUID(),
+            new Cursus(UUID.randomUUID(), "CS", "desc", "2024"),
+            "REF",
+            "Title",
+            5,
+            null);
     Exam exam = new Exam(UUID.randomUUID(), Instant.now(), BigDecimal.ONE, course);
-    User student = new User(UUID.randomUUID(), "Student", "One", UserRole.STUDENT, "s@h.school", "pwd");
-    User grader = new User(UUID.randomUUID(), "Teacher", "One", UserRole.TEACHER, "t@h.school", "pwd");
+    User student =
+        new User(UUID.randomUUID(), "Student", "One", UserRole.STUDENT, "s@h.school", "pwd");
+    User grader =
+        new User(UUID.randomUUID(), "Teacher", "One", UserRole.TEACHER, "t@h.school", "pwd");
     return new Grade(id, exam, student, grader);
   }
 
@@ -58,16 +66,18 @@ class ScoreHistoryServiceTest {
     String explanation = "First exam attempt";
 
     JGrade jGrade = JGrade.builder().id(gradeId).build();
-    JScoreHistory savedEntity = JScoreHistory.builder()
-        .id(historyId)
-        .grade(jGrade)
-        .score(score)
-        .reason(reason)
-        .explanation(explanation)
-        .build();
+    JScoreHistory savedEntity =
+        JScoreHistory.builder()
+            .id(historyId)
+            .grade(jGrade)
+            .score(score)
+            .reason(reason)
+            .explanation(explanation)
+            .build();
 
     Grade grade = createGradeModel(gradeId);
-    ScoreHistory model = new ScoreHistory(historyId, grade, score, Instant.now(), reason, explanation);
+    ScoreHistory model =
+        new ScoreHistory(historyId, grade, score, Instant.now(), reason, explanation);
 
     when(gradeRepository.findById(gradeId)).thenReturn(Optional.of(jGrade));
     when(scoreHistoryRepository.save(any(JScoreHistory.class))).thenReturn(savedEntity);
@@ -92,7 +102,8 @@ class ScoreHistoryServiceTest {
     UUID gradeId = UUID.randomUUID();
     when(gradeRepository.findById(gradeId)).thenReturn(Optional.empty());
 
-    assertThatThrownBy(() -> scoreHistoryService.create(gradeId, BigDecimal.TEN, Reason.INITIAL, "test"))
+    assertThatThrownBy(
+            () -> scoreHistoryService.create(gradeId, BigDecimal.TEN, Reason.INITIAL, "test"))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining(gradeId.toString());
   }
@@ -106,16 +117,18 @@ class ScoreHistoryServiceTest {
     String explanation = "Corrected grade";
 
     JGrade jGrade = JGrade.builder().id(gradeId).build();
-    JScoreHistory entity = JScoreHistory.builder()
-        .id(historyId)
-        .grade(jGrade)
-        .score(score)
-        .reason(reason)
-        .explanation(explanation)
-        .build();
+    JScoreHistory entity =
+        JScoreHistory.builder()
+            .id(historyId)
+            .grade(jGrade)
+            .score(score)
+            .reason(reason)
+            .explanation(explanation)
+            .build();
 
     Grade grade = createGradeModel(gradeId);
-    ScoreHistory model = new ScoreHistory(historyId, grade, score, Instant.now(), reason, explanation);
+    ScoreHistory model =
+        new ScoreHistory(historyId, grade, score, Instant.now(), reason, explanation);
 
     when(scoreHistoryRepository.findById(historyId)).thenReturn(Optional.of(entity));
     when(scoreHistoryMapper.toModel(entity)).thenReturn(model);
@@ -143,11 +156,7 @@ class ScoreHistoryServiceTest {
     BigDecimal score = BigDecimal.valueOf(85.0);
 
     JGrade jGrade = JGrade.builder().id(gradeId).build();
-    JScoreHistory entity = JScoreHistory.builder()
-        .id(historyId)
-        .grade(jGrade)
-        .score(score)
-        .build();
+    JScoreHistory entity = JScoreHistory.builder().id(historyId).grade(jGrade).score(score).build();
 
     Grade grade = createGradeModel(gradeId);
     ScoreHistory model = new ScoreHistory(historyId, grade, score, Instant.now(), null, null);
@@ -165,8 +174,7 @@ class ScoreHistoryServiceTest {
   @Test
   void should_return_empty_list_when_no_score_histories_found_by_grade() {
     UUID gradeId = UUID.randomUUID();
-    when(scoreHistoryRepository.findByGradeIdOrderByGradedAtAsc(gradeId))
-        .thenReturn(List.of());
+    when(scoreHistoryRepository.findByGradeIdOrderByGradedAtAsc(gradeId)).thenReturn(List.of());
 
     assertThat(scoreHistoryService.findByGrade(gradeId)).isEmpty();
   }

@@ -50,9 +50,8 @@ class UserServiceTest {
   @Test
   void should_create_user() {
     UUID id = UUID.randomUUID();
-    CreateUserDTO createDTO = new CreateUserDTO(
-        "John", "Doe", UserRole.STUDENT, "john@hei.school", "password123"
-    );
+    CreateUserDTO createDTO =
+        new CreateUserDTO("John", "Doe", UserRole.STUDENT, "john@hei.school", "password123");
 
     JUser savedEntity = jUser(id, "John", "Doe", UserRole.STUDENT, "john@hei.school");
     User model = userModel(id, "John", "Doe", UserRole.STUDENT, "john@hei.school");
@@ -80,12 +79,13 @@ class UserServiceTest {
 
   @Test
   void should_throw_when_email_already_exists_on_create() {
-    CreateUserDTO createDTO = new CreateUserDTO(
-        "John", "Doe", UserRole.STUDENT, "john@hei.school", "password123"
-    );
+    CreateUserDTO createDTO =
+        new CreateUserDTO("John", "Doe", UserRole.STUDENT, "john@hei.school", "password123");
 
     when(userRepository.findByEmail("john@hei.school"))
-        .thenReturn(Optional.of(jUser(UUID.randomUUID(), "John", "Doe", UserRole.STUDENT, "john@hei.school")));
+        .thenReturn(
+            Optional.of(
+                jUser(UUID.randomUUID(), "John", "Doe", UserRole.STUDENT, "john@hei.school")));
 
     assertThatThrownBy(() -> userService.create(createDTO))
         .isInstanceOf(IllegalArgumentException.class)

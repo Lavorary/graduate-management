@@ -27,11 +27,13 @@ public class CourseService {
   private final UserRepository userRepository;
   private final CourseMapper courseMapper;
 
-  public CourseDTO create(UUID cursusId, String ref, String title, int credit, Set<UUID> teacherIds) {
+  public CourseDTO create(
+      UUID cursusId, String ref, String title, int credit, Set<UUID> teacherIds) {
     JCursus cursus =
         cursusRepository
             .findById(cursusId)
-            .orElseThrow(() -> new IllegalArgumentException("Cursus with Id : " + cursusId + "  not found"));
+            .orElseThrow(
+                () -> new IllegalArgumentException("Cursus with Id : " + cursusId + "  not found"));
 
     Set<JUser> teachers = new HashSet<>();
     if (teacherIds != null) {
@@ -39,13 +41,22 @@ public class CourseService {
         teachers.add(
             userRepository
                 .findById(teacherId)
-                .orElseThrow(() -> new IllegalArgumentException("Teacher with Id : " + teacherId + "  not found")));
+                .orElseThrow(
+                    () ->
+                        new IllegalArgumentException(
+                            "Teacher with Id : " + teacherId + "  not found")));
       }
     }
 
     JCourse saved =
         courseRepository.save(
-            JCourse.builder().cursus(cursus).ref(ref).title(title).credit(credit).teachers(teachers).build());
+            JCourse.builder()
+                .cursus(cursus)
+                .ref(ref)
+                .title(title)
+                .credit(credit)
+                .teachers(teachers)
+                .build());
     return toDto(saved);
   }
 
@@ -53,7 +64,8 @@ public class CourseService {
     JCourse entity =
         courseRepository
             .findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Cours during with Id : " + id + " not found"));
+            .orElseThrow(
+                () -> new IllegalArgumentException("Cours during with Id : " + id + " not found"));
     return toDto(entity);
   }
 

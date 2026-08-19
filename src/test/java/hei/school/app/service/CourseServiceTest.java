@@ -75,14 +75,15 @@ class CourseServiceTest {
 
     JCursus jCursus = jCursus(cursusId);
     JUser jTeacher = jTeacher(teacherId);
-    JCourse savedEntity = JCourse.builder()
-        .id(courseId)
-        .cursus(jCursus)
-        .ref("ALG101")
-        .title("Algorithmique")
-        .credit(5)
-        .teachers(Set.of(jTeacher))
-        .build();
+    JCourse savedEntity =
+        JCourse.builder()
+            .id(courseId)
+            .cursus(jCursus)
+            .ref("ALG101")
+            .title("Algorithmique")
+            .credit(5)
+            .teachers(Set.of(jTeacher))
+            .build();
 
     Cursus cursus = cursusModel(cursusId);
     User teacher = userModel(teacherId);
@@ -93,7 +94,8 @@ class CourseServiceTest {
     when(courseRepository.save(any(JCourse.class))).thenReturn(savedEntity);
     when(courseMapper.toModel(savedEntity)).thenReturn(model);
 
-    CourseDTO result = courseService.create(cursusId, "ALG101", "Algorithmique", 5, Set.of(teacherId));
+    CourseDTO result =
+        courseService.create(cursusId, "ALG101", "Algorithmique", 5, Set.of(teacherId));
 
     ArgumentCaptor<JCourse> captor = ArgumentCaptor.forClass(JCourse.class);
     verify(courseRepository).save(captor.capture());
@@ -112,14 +114,15 @@ class CourseServiceTest {
     UUID courseId = UUID.randomUUID();
 
     JCursus jCursus = jCursus(cursusId);
-    JCourse savedEntity = JCourse.builder()
-        .id(courseId)
-        .cursus(jCursus)
-        .ref("ALG101")
-        .title("Algorithmique")
-        .credit(5)
-        .teachers(Set.of())
-        .build();
+    JCourse savedEntity =
+        JCourse.builder()
+            .id(courseId)
+            .cursus(jCursus)
+            .ref("ALG101")
+            .title("Algorithmique")
+            .credit(5)
+            .teachers(Set.of())
+            .build();
 
     Cursus cursus = cursusModel(cursusId);
     Course model = new Course(courseId, cursus, "ALG101", "Algorithmique", 5, Set.of());
@@ -163,13 +166,14 @@ class CourseServiceTest {
     UUID cursusId = UUID.randomUUID();
 
     JCursus jCursus = jCursus(cursusId);
-    JCourse entity = JCourse.builder()
-        .id(courseId)
-        .cursus(jCursus)
-        .ref("ALG101")
-        .title("Algo")
-        .credit(5)
-        .build();
+    JCourse entity =
+        JCourse.builder()
+            .id(courseId)
+            .cursus(jCursus)
+            .ref("ALG101")
+            .title("Algo")
+            .credit(5)
+            .build();
 
     Course model = new Course(courseId, cursusModel(cursusId), "ALG101", "Algo", 5, Set.of());
 
@@ -197,13 +201,14 @@ class CourseServiceTest {
     UUID courseId = UUID.randomUUID();
 
     JCursus jCursus = jCursus(cursusId);
-    JCourse entity = JCourse.builder()
-        .id(courseId)
-        .cursus(jCursus)
-        .ref("ALG101")
-        .title("Algo")
-        .credit(5)
-        .build();
+    JCourse entity =
+        JCourse.builder()
+            .id(courseId)
+            .cursus(jCursus)
+            .ref("ALG101")
+            .title("Algo")
+            .credit(5)
+            .build();
 
     Course model = new Course(courseId, cursusModel(cursusId), "ALG101", "Algo", 5, Set.of());
 
@@ -231,17 +236,19 @@ class CourseServiceTest {
 
     JUser jTeacher = jTeacher(teacherId);
     JCursus jCursus = jCursus(cursusId);
-    JCourse entity = JCourse.builder()
-        .id(courseId)
-        .cursus(jCursus)
-        .ref("ALG101")
-        .title("Algo")
-        .credit(5)
-        .teachers(Set.of(jTeacher))
-        .build();
+    JCourse entity =
+        JCourse.builder()
+            .id(courseId)
+            .cursus(jCursus)
+            .ref("ALG101")
+            .title("Algo")
+            .credit(5)
+            .teachers(Set.of(jTeacher))
+            .build();
 
     User teacher = userModel(teacherId);
-    Course model = new Course(courseId, cursusModel(cursusId), "ALG101", "Algo", 5, Set.of(teacher));
+    Course model =
+        new Course(courseId, cursusModel(cursusId), "ALG101", "Algo", 5, Set.of(teacher));
 
     when(courseRepository.findByTeachers_Id(teacherId)).thenReturn(List.of(entity));
     when(courseMapper.toModel(entity)).thenReturn(model);

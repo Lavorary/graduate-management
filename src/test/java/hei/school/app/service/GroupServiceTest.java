@@ -53,11 +53,7 @@ class GroupServiceTest {
     UUID cursusId = UUID.randomUUID();
 
     JCursus jCursus = jCursus(cursusId);
-    JGroup savedEntity = JGroup.builder()
-        .id(groupId)
-        .ref("G1")
-        .cursus(Set.of(jCursus))
-        .build();
+    JGroup savedEntity = JGroup.builder().id(groupId).ref("G1").cursus(Set.of(jCursus)).build();
 
     Cursus cursus = cursusModel(cursusId);
     Group model = new Group(groupId, "G1", Set.of(cursus));
@@ -81,11 +77,7 @@ class GroupServiceTest {
   void should_create_group_without_cursus() {
     UUID groupId = UUID.randomUUID();
 
-    JGroup savedEntity = JGroup.builder()
-        .id(groupId)
-        .ref("G1")
-        .cursus(Set.of())
-        .build();
+    JGroup savedEntity = JGroup.builder().id(groupId).ref("G1").cursus(Set.of()).build();
 
     Group model = new Group(groupId, "G1", Set.of());
 
@@ -139,11 +131,7 @@ class GroupServiceTest {
     UUID groupId = UUID.randomUUID();
 
     JCursus jCursus = jCursus(cursusId);
-    JGroup entity = JGroup.builder()
-        .id(groupId)
-        .ref("G1")
-        .cursus(Set.of(jCursus))
-        .build();
+    JGroup entity = JGroup.builder().id(groupId).ref("G1").cursus(Set.of(jCursus)).build();
 
     Cursus cursus = cursusModel(cursusId);
     Group model = new Group(groupId, "G1", Set.of(cursus));

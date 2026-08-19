@@ -27,17 +27,20 @@ public class GradeService {
     JExam exam =
         examRepository
             .findById(examId)
-            .orElseThrow(() -> new IllegalArgumentException("Exam with Id : " + examId + " not found"));
+            .orElseThrow(
+                () -> new IllegalArgumentException("Exam with Id : " + examId + " not found"));
     JUser student =
         userRepository
             .findById(studentId)
             .orElseThrow(
-                () -> new IllegalArgumentException("Student with Id : " + studentId + " not found"));
+                () ->
+                    new IllegalArgumentException("Student with Id : " + studentId + " not found"));
     JUser gradedBy =
         userRepository
             .findById(gradedById)
             .orElseThrow(
-                () -> new IllegalArgumentException("Grader with Id : " + gradedById + " not found"));
+                () ->
+                    new IllegalArgumentException("Grader with Id : " + gradedById + " not found"));
 
     JGrade saved =
         gradeRepository.save(
@@ -49,7 +52,8 @@ public class GradeService {
     JGrade entity =
         gradeRepository
             .findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Grade with Id : " + id + " not found"));
+            .orElseThrow(
+                () -> new IllegalArgumentException("Grade with Id : " + id + " not found"));
     return toDto(entity);
   }
 

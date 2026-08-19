@@ -26,7 +26,8 @@ public class ScoreHistoryService {
     JGrade grade =
         gradeRepository
             .findById(gradeId)
-            .orElseThrow(() -> new IllegalArgumentException("Grade with Id : " + gradeId + " not found"));
+            .orElseThrow(
+                () -> new IllegalArgumentException("Grade with Id : " + gradeId + " not found"));
 
     JScoreHistory saved =
         scoreHistoryRepository.save(
@@ -47,7 +48,7 @@ public class ScoreHistoryService {
                 () -> new IllegalArgumentException("ScoreHistory with Id : " + id + " not found"));
     return toDto(entity);
   }
-  
+
   public List<ScoreHistoryDTO> findByGrade(UUID gradeId) {
     return scoreHistoryRepository.findByGradeIdOrderByGradedAtAsc(gradeId).stream()
         .map(this::toDto)

@@ -61,12 +61,22 @@ class GradeServiceTest {
   }
 
   private Exam examModel(UUID id) {
-    return new Exam(id, Instant.now(), BigDecimal.valueOf(1.0),
-        new Course(UUID.randomUUID(), new Cursus(UUID.randomUUID(), "CS", "desc", "2024"), "REF", "Title", 5, null));
+    return new Exam(
+        id,
+        Instant.now(),
+        BigDecimal.valueOf(1.0),
+        new Course(
+            UUID.randomUUID(),
+            new Cursus(UUID.randomUUID(), "CS", "desc", "2024"),
+            "REF",
+            "Title",
+            5,
+            null));
   }
 
   private User userModel(UUID id, String firstName, String lastName, UserRole role) {
-    return new User(id, firstName, lastName, role, firstName.toLowerCase() + "@hei.school", "encoded");
+    return new User(
+        id, firstName, lastName, role, firstName.toLowerCase() + "@hei.school", "encoded");
   }
 
   @Test
@@ -80,12 +90,8 @@ class GradeServiceTest {
     JUser jStudent = jUser(studentId, "Student", "One", UserRole.STUDENT);
     JUser jGrader = jUser(graderId, "Teacher", "One", UserRole.TEACHER);
 
-    JGrade savedEntity = JGrade.builder()
-        .id(gradeId)
-        .exam(jExam)
-        .student(jStudent)
-        .gradedBy(jGrader)
-        .build();
+    JGrade savedEntity =
+        JGrade.builder().id(gradeId).exam(jExam).student(jStudent).gradedBy(jGrader).build();
 
     Exam exam = examModel(examId);
     User student = userModel(studentId, "Student", "One", UserRole.STUDENT);
@@ -141,7 +147,8 @@ class GradeServiceTest {
     UUID graderId = UUID.randomUUID();
 
     when(examRepository.findById(examId)).thenReturn(Optional.of(jExam(examId)));
-    when(userRepository.findById(studentId)).thenReturn(Optional.of(jUser(studentId, "Student", "One", UserRole.STUDENT)));
+    when(userRepository.findById(studentId))
+        .thenReturn(Optional.of(jUser(studentId, "Student", "One", UserRole.STUDENT)));
     when(userRepository.findById(graderId)).thenReturn(Optional.empty());
 
     assertThatThrownBy(() -> gradeService.create(examId, studentId, graderId))
@@ -159,12 +166,8 @@ class GradeServiceTest {
     JExam jExam = jExam(examId);
     JUser jStudent = jUser(studentId, "Student", "One", UserRole.STUDENT);
     JUser jGrader = jUser(graderId, "Teacher", "One", UserRole.TEACHER);
-    JGrade entity = JGrade.builder()
-        .id(gradeId)
-        .exam(jExam)
-        .student(jStudent)
-        .gradedBy(jGrader)
-        .build();
+    JGrade entity =
+        JGrade.builder().id(gradeId).exam(jExam).student(jStudent).gradedBy(jGrader).build();
 
     Exam exam = examModel(examId);
     User student = userModel(studentId, "Student", "One", UserRole.STUDENT);
@@ -201,12 +204,8 @@ class GradeServiceTest {
     JExam jExam = jExam(examId);
     JUser jStudent = jUser(studentId, "Student", "One", UserRole.STUDENT);
     JUser jGrader = jUser(graderId, "Teacher", "One", UserRole.TEACHER);
-    JGrade entity = JGrade.builder()
-        .id(gradeId)
-        .exam(jExam)
-        .student(jStudent)
-        .gradedBy(jGrader)
-        .build();
+    JGrade entity =
+        JGrade.builder().id(gradeId).exam(jExam).student(jStudent).gradedBy(jGrader).build();
 
     Exam exam = examModel(examId);
     User student = userModel(studentId, "Student", "One", UserRole.STUDENT);
@@ -239,12 +238,8 @@ class GradeServiceTest {
     JExam jExam = jExam(examId);
     JUser jStudent = jUser(studentId, "Student", "One", UserRole.STUDENT);
     JUser jGrader = jUser(graderId, "Teacher", "One", UserRole.TEACHER);
-    JGrade entity = JGrade.builder()
-        .id(gradeId)
-        .exam(jExam)
-        .student(jStudent)
-        .gradedBy(jGrader)
-        .build();
+    JGrade entity =
+        JGrade.builder().id(gradeId).exam(jExam).student(jStudent).gradedBy(jGrader).build();
 
     Exam exam = examModel(examId);
     User student = userModel(studentId, "Student", "One", UserRole.STUDENT);
@@ -277,12 +272,8 @@ class GradeServiceTest {
     JExam jExam = jExam(examId);
     JUser jStudent = jUser(studentId, "Student", "One", UserRole.STUDENT);
     JUser jGrader = jUser(teacherId, "Teacher", "One", UserRole.TEACHER);
-    JGrade entity = JGrade.builder()
-        .id(gradeId)
-        .exam(jExam)
-        .student(jStudent)
-        .gradedBy(jGrader)
-        .build();
+    JGrade entity =
+        JGrade.builder().id(gradeId).exam(jExam).student(jStudent).gradedBy(jGrader).build();
 
     Exam exam = examModel(examId);
     User student = userModel(studentId, "Student", "One", UserRole.STUDENT);

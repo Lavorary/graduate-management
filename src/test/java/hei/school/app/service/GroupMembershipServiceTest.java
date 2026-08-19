@@ -51,11 +51,7 @@ class GroupMembershipServiceTest {
   }
 
   private JGroup jGroup(UUID id) {
-    return JGroup.builder()
-        .id(id)
-        .ref("G1")
-        .cursus(Set.of())
-        .build();
+    return JGroup.builder().id(id).ref("G1").cursus(Set.of()).build();
   }
 
   private User userModel(UUID id) {
@@ -77,13 +73,14 @@ class GroupMembershipServiceTest {
     JUser jStudent = jStudent(studentId);
     JGroup jGroup = jGroup(groupId);
 
-    JGroupMembership savedEntity = JGroupMembership.builder()
-        .id(membershipId)
-        .startDate(startDate)
-        .endDate(endDate)
-        .student(jStudent)
-        .group(jGroup)
-        .build();
+    JGroupMembership savedEntity =
+        JGroupMembership.builder()
+            .id(membershipId)
+            .startDate(startDate)
+            .endDate(endDate)
+            .student(jStudent)
+            .group(jGroup)
+            .build();
 
     User student = userModel(studentId);
     Group group = groupModel(groupId);
@@ -94,7 +91,8 @@ class GroupMembershipServiceTest {
     when(groupMembershipRepository.save(any(JGroupMembership.class))).thenReturn(savedEntity);
     when(groupMembershipMapper.toModel(savedEntity)).thenReturn(model);
 
-    GroupMembershipDTO result = groupMembershipService.create(startDate, endDate, studentId, groupId);
+    GroupMembershipDTO result =
+        groupMembershipService.create(startDate, endDate, studentId, groupId);
 
     ArgumentCaptor<JGroupMembership> captor = ArgumentCaptor.forClass(JGroupMembership.class);
     verify(groupMembershipRepository).save(captor.capture());
@@ -114,7 +112,9 @@ class GroupMembershipServiceTest {
     UUID studentId = UUID.randomUUID();
     when(userRepository.findById(studentId)).thenReturn(Optional.empty());
 
-    assertThatThrownBy(() -> groupMembershipService.create(LocalDate.now(), null, studentId, UUID.randomUUID()))
+    assertThatThrownBy(
+            () ->
+                groupMembershipService.create(LocalDate.now(), null, studentId, UUID.randomUUID()))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining(studentId.toString());
   }
@@ -127,7 +127,8 @@ class GroupMembershipServiceTest {
     when(userRepository.findById(studentId)).thenReturn(Optional.of(jStudent(studentId)));
     when(groupRepository.findById(groupId)).thenReturn(Optional.empty());
 
-    assertThatThrownBy(() -> groupMembershipService.create(LocalDate.now(), null, studentId, groupId))
+    assertThatThrownBy(
+            () -> groupMembershipService.create(LocalDate.now(), null, studentId, groupId))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining(groupId.toString());
   }
@@ -142,13 +143,14 @@ class GroupMembershipServiceTest {
 
     JUser jStudent = jStudent(studentId);
     JGroup jGroup = jGroup(groupId);
-    JGroupMembership entity = JGroupMembership.builder()
-        .id(membershipId)
-        .startDate(startDate)
-        .endDate(endDate)
-        .student(jStudent)
-        .group(jGroup)
-        .build();
+    JGroupMembership entity =
+        JGroupMembership.builder()
+            .id(membershipId)
+            .startDate(startDate)
+            .endDate(endDate)
+            .student(jStudent)
+            .group(jGroup)
+            .build();
 
     User student = userModel(studentId);
     Group group = groupModel(groupId);
@@ -182,12 +184,13 @@ class GroupMembershipServiceTest {
 
     JUser jStudent = jStudent(studentId);
     JGroup jGroup = jGroup(groupId);
-    JGroupMembership entity = JGroupMembership.builder()
-        .id(membershipId)
-        .startDate(startDate)
-        .student(jStudent)
-        .group(jGroup)
-        .build();
+    JGroupMembership entity =
+        JGroupMembership.builder()
+            .id(membershipId)
+            .startDate(startDate)
+            .student(jStudent)
+            .group(jGroup)
+            .build();
 
     User student = userModel(studentId);
     Group group = groupModel(groupId);
@@ -221,13 +224,14 @@ class GroupMembershipServiceTest {
 
     JUser jStudent = jStudent(studentId);
     JGroup jGroup = jGroup(groupId);
-    JGroupMembership entity = JGroupMembership.builder()
-        .id(membershipId)
-        .startDate(startDate)
-        .student(jStudent)
-        .group(jGroup)
-        .endDate(null)
-        .build();
+    JGroupMembership entity =
+        JGroupMembership.builder()
+            .id(membershipId)
+            .startDate(startDate)
+            .student(jStudent)
+            .group(jGroup)
+            .endDate(null)
+            .build();
 
     User student = userModel(studentId);
     Group group = groupModel(groupId);
@@ -261,12 +265,13 @@ class GroupMembershipServiceTest {
 
     JUser jStudent = jStudent(studentId);
     JGroup jGroup = jGroup(groupId);
-    JGroupMembership entity = JGroupMembership.builder()
-        .id(membershipId)
-        .startDate(startDate)
-        .student(jStudent)
-        .group(jGroup)
-        .build();
+    JGroupMembership entity =
+        JGroupMembership.builder()
+            .id(membershipId)
+            .startDate(startDate)
+            .student(jStudent)
+            .group(jGroup)
+            .build();
 
     User student = userModel(studentId);
     Group group = groupModel(groupId);

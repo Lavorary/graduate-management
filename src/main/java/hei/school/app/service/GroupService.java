@@ -31,7 +31,10 @@ public class GroupService {
         cursusSet.add(
             cursusRepository
                 .findById(cursusId)
-                .orElseThrow(() -> new IllegalArgumentException("Cursus with id : " + cursusId + "  not found")));
+                .orElseThrow(
+                    () ->
+                        new IllegalArgumentException(
+                            "Cursus with id : " + cursusId + "  not found")));
       }
     }
     JGroup saved = groupRepository.save(JGroup.builder().ref(ref).cursus(cursusSet).build());
@@ -42,7 +45,8 @@ public class GroupService {
     JGroup entity =
         groupRepository
             .findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Group with Id : " + id + " not found"));
+            .orElseThrow(
+                () -> new IllegalArgumentException("Group with Id : " + id + " not found"));
     return toDto(entity);
   }
 

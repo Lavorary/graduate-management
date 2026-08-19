@@ -30,11 +30,13 @@ public class GroupMembershipService {
         userRepository
             .findById(studentId)
             .orElseThrow(
-                () -> new IllegalArgumentException("Student with Id : " + studentId + " not found"));
+                () ->
+                    new IllegalArgumentException("Student with Id : " + studentId + " not found"));
     JGroup group =
         groupRepository
             .findById(groupId)
-            .orElseThrow(() -> new IllegalArgumentException("Group with Id : " + groupId + " not found"));
+            .orElseThrow(
+                () -> new IllegalArgumentException("Group with Id : " + groupId + " not found"));
 
     JGroupMembership saved =
         groupMembershipRepository.save(
@@ -52,7 +54,8 @@ public class GroupMembershipService {
         groupMembershipRepository
             .findById(id)
             .orElseThrow(
-                () -> new IllegalArgumentException("GroupMembership with Id : " + id + " not found"));
+                () ->
+                    new IllegalArgumentException("GroupMembership with Id : " + id + " not found"));
     return toDto(entity);
   }
 
@@ -61,7 +64,7 @@ public class GroupMembershipService {
         .map(this::toDto)
         .toList();
   }
-  
+
   public List<GroupMembershipDTO> findActiveByStudent(UUID studentId) {
     return groupMembershipRepository.findByStudentIdAndEndDateIsNull(studentId).stream()
         .map(this::toDto)

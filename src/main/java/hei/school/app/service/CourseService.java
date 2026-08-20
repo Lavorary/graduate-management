@@ -77,6 +77,20 @@ public class CourseService {
     return courseRepository.findByTeachers_Id(teacherId).stream().map(this::toDto).toList();
   }
 
+  public List<CourseDTO> findByCursusIds(List<UUID> cursusIds) {
+    return courseRepository.findAllByCursusIdIn(cursusIds).stream().map(this::toDto).toList();
+  }
+
+  public boolean isTaughtBy(UUID courseId, UUID teacherId) {
+    return courseRepository.existsByIdAndTeacherId(courseId, teacherId);
+  }
+
+  public UUID getCursusIdOf(UUID courseId) {
+    return courseRepository
+        .findCursusIdByCourseId(courseId)
+        .orElseThrow(() -> new IllegalArgumentException("Course with Id : " + courseId + " not found"));
+  }
+
   private CourseDTO toDto(JCourse entity) {
     Course model = courseMapper.toModel(entity);
     Set<UUID> teacherIds =

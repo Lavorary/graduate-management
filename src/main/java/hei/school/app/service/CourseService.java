@@ -88,7 +88,8 @@ public class CourseService {
   public UUID getCursusIdOf(UUID courseId) {
     return courseRepository
         .findCursusIdByCourseId(courseId)
-        .orElseThrow(() -> new IllegalArgumentException("Course with Id : " + courseId + " not found"));
+        .orElseThrow(
+            () -> new IllegalArgumentException("Course with Id : " + courseId + " not found"));
   }
 
   private CourseDTO toDto(JCourse entity) {

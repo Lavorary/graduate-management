@@ -68,7 +68,7 @@ public class GradeService {
   public List<GradeDTO> findByTeacher(UUID teacherId) {
     return gradeRepository.findByGradedBy_Id(teacherId).stream().map(this::toDto).toList();
   }
-  
+
   public boolean belongsToStudent(UUID gradeId, UUID studentId) {
     return gradeRepository.existsByIdAndStudentId(gradeId, studentId);
   }
@@ -76,7 +76,8 @@ public class GradeService {
   public UUID getCourseIdOf(UUID gradeId) {
     return gradeRepository
         .findCourseIdByGradeId(gradeId)
-        .orElseThrow(() -> new IllegalArgumentException("Grade with Id : " + gradeId + " not found"));
+        .orElseThrow(
+            () -> new IllegalArgumentException("Grade with Id : " + gradeId + " not found"));
   }
 
   private GradeDTO toDto(JGrade entity) {

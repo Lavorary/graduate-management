@@ -74,7 +74,7 @@ public class GroupMembershipService {
   public List<GroupMembershipDTO> findByGroup(UUID groupId) {
     return groupMembershipRepository.findByGroupId(groupId).stream().map(this::toDto).toList();
   }
-  
+
   public boolean hasTeacherAccessToStudent(UUID teacherId, UUID studentId) {
     return groupMembershipRepository.existsTeacherAccessToStudent(teacherId, studentId);
   }

@@ -74,6 +74,18 @@ public class GroupMembershipService {
   public List<GroupMembershipDTO> findByGroup(UUID groupId) {
     return groupMembershipRepository.findByGroupId(groupId).stream().map(this::toDto).toList();
   }
+  
+  public boolean hasTeacherAccessToStudent(UUID teacherId, UUID studentId) {
+    return groupMembershipRepository.existsTeacherAccessToStudent(teacherId, studentId);
+  }
+
+  public boolean isStudentInCursus(UUID studentId, UUID cursusId) {
+    return groupMembershipRepository.existsByStudentIdAndCursusId(studentId, cursusId);
+  }
+
+  public List<UUID> findActiveCursusIds(UUID studentId) {
+    return groupMembershipRepository.findCursusIdsForStudent(studentId);
+  }
 
   private GroupMembershipDTO toDto(JGroupMembership entity) {
     GroupMembership model = groupMembershipMapper.toModel(entity);

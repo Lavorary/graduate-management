@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 public interface GroupMembershipRepository extends JpaRepository<JGroupMembership, UUID> {
   List<JGroupMembership> findByStudentIdOrderByStartDateAsc(UUID studentId);
@@ -20,14 +19,13 @@ public interface GroupMembershipRepository extends JpaRepository<JGroupMembershi
       select case when count(gm) > 0 then true else false end
       from JGroupMembership gm
       join gm.group.cursus cur
-      join cur.courses co
+      join JCourse co on co.cursus = cur
       join co.teachers t
       where gm.student.id = :studentId
-      and t.id = :teacherId
-      and (gm.endDate is null or gm.endDate > current_date)
+        and t.id = :teacherId
+        and (gm.endDate is null or gm.endDate > current_date)
       """)
-  boolean existsTeacherAccessToStudent(
-      @Param("teacherId") UUID teacherId, @Param("studentId") UUID studentId);
+  boolean existsTeacherAccessToStudent(UUID teacherId, UUID studentId);
 
   @Query(
       """

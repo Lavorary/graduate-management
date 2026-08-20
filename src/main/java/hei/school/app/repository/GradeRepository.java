@@ -18,4 +18,7 @@ public interface GradeRepository extends JpaRepository<JGrade, UUID> {
 
   @Query("select g.exam.course.id from JGrade g where g.id = :gradeId")
   Optional<UUID> findCourseIdByGradeId(UUID gradeId);
+
+  @Query("select g from JGrade g where g.student.id = :studentId and g.exam.course.id = :coourseId")
+  List<JGrade> findByStudentIdAndCourseId(UUID sutdentId, UUID courseId);
 }

@@ -1,0 +1,99 @@
+package hei.school.app.security;
+
+import hei.school.app.security.authorizer.CourseAccessAuthorizationManager;
+import hei.school.app.security.authorizer.ExamAccessAuthorizationManager;
+import hei.school.app.security.authorizer.GradeAccessAuthorizationManager;
+import hei.school.app.security.authorizer.StudentAccessAuthorizationManager;
+import hei.school.app.security.jwt.JwtAuthFilter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
+@RequiredArgsConstructor
+public class SecurityConfig {
+  private final JwtAuthFilter jwtAuthFilter;
+  private final UserDetailsService userDetailsService;
+  private final CourseAccessAuthorizationManager courseAccessAuthorizationManager;
+  private final ExamAccessAuthorizationManager examAccessAuthorizationManager;
+  private final GradeAccessAuthorizationManager gradeAccessAuthorizationManager;
+  private final StudentAccessAuthorizationManager studentAccessAuthorizationManager;
+
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http.csrf(AbstractHttpConfigurer::disable)
+        .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(
+            auth ->
+                auth.requestMatchers("/auth/**")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/students/{studentId}/**")
+                    .access(studentAccessAuthorizationManager)
+                    .requestMatchers(HttpMethod.GET, "/api/courses")
+                    .authenticated()
+                    .requestMatchers(HttpMethod.GET, "/api/courses/{courseId}")
+                    .access(courseAccessAuthorizationManager)
+                    .requestMatchers(HttpMethod.POST, "/api/courses/{courseId}/exams")
+                    .access(courseAccessAuthorizationManager)
+                    .requestMatchers(HttpMethod.GET, "/api/exams/{examId}")
+                    .access(examAccessAuthorizationManager)
+                    .requestMatchers(HttpMethod.PUT, "/api/exams/{examId}")
+                    .access(examAccessAuthorizationManager)
+                    .requestMatchers(HttpMethod.DELETE, "/api/exams/{examId}")
+                    .access(examAccessAuthorizationManager)
+                    .requestMatchers(HttpMethod.GET, "/api/grades/{gradeId}")
+                    .access(gradeAccessAuthorizationManager)
+                    .requestMatchers(HttpMethod.PUT, "/api/students/**")
+                    .hasRole("ADMIN")
+                    .requestMatchers(
+                        HttpMethod.POST, "/api/courses", "/api/cursus/**", "/api/groups/**")
+                    .hasRole("ADMIN")
+                    .requestMatchers(
+                        HttpMethod.PUT, "/api/courses/**", "/api/cursus/**", "/api/groups/**")
+                    .hasRole("ADMIN")
+                    .requestMatchers(
+                        HttpMethod.DELETE, "/api/courses/**", "/api/cursus/**", "/api/groups/**")
+                    .hasRole("ADMIN")
+                    .anyRequest()
+                    .authenticated())
+        .authenticationProvider(authenticationProvider())
+        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+    return http.build();
+  }
+
+  @Bean
+  public DaoAuthenticationProvider authenticationProvider() {
+    var provider = new DaoAuthenticationProvider();
+    provider.setUserDetailsService(userDetailsService);
+    provider.setPasswordEncoder(passwordEncoder());
+    return provider;
+  }
+
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
+      throws Exception {
+    return config.getAuthenticationManager();
+  }
+}

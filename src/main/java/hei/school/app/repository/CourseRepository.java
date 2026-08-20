@@ -16,7 +16,7 @@ public interface CourseRepository extends JpaRepository<JCourse, UUID> {
 
   @Query(
       """
-      select cas when count(c) > 0 then true else false end
+      select case when count(c) > 0 then true else false end
       from JCourse c join c.teachers t
       where c.id = :courseId and t.id = :teacherId
       """)

@@ -265,4 +265,73 @@ class CourseServiceTest {
 
     assertThat(courseService.findByTeacher(teacherId)).isEmpty();
   }
+
+  @Test
+  void should_find_by_cursus_ids() {
+    UUID cursusId = UUID.randomUUID();
+    UUID courseId = UUID.randomUUID();
+
+    JCursus jCursus = jCursus(cursusId);
+    JCourse entity =
+        JCourse.builder()
+            .id(courseId)
+            .cursus(jCursus)
+            .ref("ALG101")
+            .title("Algo")
+            .credit(5)
+            .build();
+    Course model = new Course(courseId, cursusModel(cursusId), "ALG101", "Algo", 5, Set.of());
+
+    when(courseRepository.findAllByCursusIdIn(List.of(cursusId))).thenReturn(List.of(entity));
+    when(courseMapper.toModel(entity)).thenReturn(model);
+
+    List<CourseDTO> results = courseService.findByCursusIds(List.of(cursusId));
+    assertThat(results).hasSize(1);
+    assertThat(results.getFirst().cursusId()).isEqualTo(cursusId);
+  }
+
+  @Test
+  void should_return_empty_list_when_no_courses_found_by_cursus_ids() {
+    UUID cursusId = UUID.randomUUID();
+    when(courseRepository.findAllByCursusIdIn(List.of(cursusId))).thenReturn(List.of());
+
+    assertThat(courseService.findByCursusIds(List.of(cursusId))).isEmpty();
+  }
+
+  @Test
+  void should_return_true_when_course_is_taught_by_teacher() {
+    UUID courseId = UUID.randomUUID();
+    UUID teacherId = UUID.randomUUID();
+    when(courseRepository.existsByIdAndTeacherId(courseId, teacherId)).thenReturn(true);
+
+    assertThat(courseService.isTaughtBy(courseId, teacherId)).isTrue();
+  }
+
+  @Test
+  void should_return_false_when_course_is_not_taught_by_teacher() {
+    UUID courseId = UUID.randomUUID();
+    UUID teacherId = UUID.randomUUID();
+    when(courseRepository.existsByIdAndTeacherId(courseId, teacherId)).thenReturn(false);
+
+    assertThat(courseService.isTaughtBy(courseId, teacherId)).isFalse();
+  }
+
+  @Test
+  void should_get_cursus_id_of_course() {
+    UUID courseId = UUID.randomUUID();
+    UUID cursusId = UUID.randomUUID();
+    when(courseRepository.findCursusIdByCourseId(courseId)).thenReturn(Optional.of(cursusId));
+
+    assertThat(courseService.getCursusIdOf(courseId)).isEqualTo(cursusId);
+  }
+
+  @Test
+  void should_throw_when_getting_cursus_id_of_unknown_course() {
+    UUID courseId = UUID.randomUUID();
+    when(courseRepository.findCursusIdByCourseId(courseId)).thenReturn(Optional.empty());
+
+    assertThatThrownBy(() -> courseService.getCursusIdOf(courseId))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining(courseId.toString());
+  }
 }

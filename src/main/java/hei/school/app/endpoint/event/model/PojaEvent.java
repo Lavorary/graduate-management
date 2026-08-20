@@ -15,4 +15,3 @@ public abstract class PojaEvent {
 
   public abstract Duration maxConsumerBackoffBetweenRetries();
 }
-

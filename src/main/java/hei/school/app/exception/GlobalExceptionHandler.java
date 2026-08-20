@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(AccessDeniedException.class)
   public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException ex) {
-    return build(HttpStatus.FORBIDDEN, "Access denied: " + ex.getMessage());
+    return build(HttpStatus.FORBIDDEN, ex.getMessage());
   }
 
   @ExceptionHandler({UsernameNotFoundException.class, ResourceNotFoundException.class})

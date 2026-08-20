@@ -292,4 +292,62 @@ class GroupMembershipServiceTest {
 
     assertThat(groupMembershipService.findByGroup(groupId)).isEmpty();
   }
+
+  @Test
+  void should_return_true_when_teacher_has_access_to_student() {
+    UUID teacherId = UUID.randomUUID();
+    UUID studentId = UUID.randomUUID();
+    when(groupMembershipRepository.existsTeacherAccessToStudent(teacherId, studentId))
+        .thenReturn(true);
+
+    assertThat(groupMembershipService.hasTeacherAccessToStudent(teacherId, studentId)).isTrue();
+  }
+
+  @Test
+  void should_return_false_when_teacher_has_no_access_to_student() {
+    UUID teacherId = UUID.randomUUID();
+    UUID studentId = UUID.randomUUID();
+    when(groupMembershipRepository.existsTeacherAccessToStudent(teacherId, studentId))
+        .thenReturn(false);
+
+    assertThat(groupMembershipService.hasTeacherAccessToStudent(teacherId, studentId)).isFalse();
+  }
+
+  @Test
+  void should_return_true_when_student_is_in_cursus() {
+    UUID studentId = UUID.randomUUID();
+    UUID cursusId = UUID.randomUUID();
+    when(groupMembershipRepository.existsByStudentIdAndCursusId(studentId, cursusId))
+        .thenReturn(true);
+
+    assertThat(groupMembershipService.isStudentInCursus(studentId, cursusId)).isTrue();
+  }
+
+  @Test
+  void should_return_false_when_student_is_not_in_cursus() {
+    UUID studentId = UUID.randomUUID();
+    UUID cursusId = UUID.randomUUID();
+    when(groupMembershipRepository.existsByStudentIdAndCursusId(studentId, cursusId))
+        .thenReturn(false);
+
+    assertThat(groupMembershipService.isStudentInCursus(studentId, cursusId)).isFalse();
+  }
+
+  @Test
+  void should_find_active_cursus_ids_for_student() {
+    UUID studentId = UUID.randomUUID();
+    UUID cursusId = UUID.randomUUID();
+    when(groupMembershipRepository.findCursusIdsForStudent(studentId))
+        .thenReturn(List.of(cursusId));
+
+    assertThat(groupMembershipService.findActiveCursusIds(studentId)).containsExactly(cursusId);
+  }
+
+  @Test
+  void should_return_empty_list_when_no_active_cursus_for_student() {
+    UUID studentId = UUID.randomUUID();
+    when(groupMembershipRepository.findCursusIdsForStudent(studentId)).thenReturn(List.of());
+
+    assertThat(groupMembershipService.findActiveCursusIds(studentId)).isEmpty();
+  }
 }

@@ -151,4 +151,17 @@ class GroupServiceTest {
 
     assertThat(groupService.findByCursus(cursusId)).isEmpty();
   }
+
+  @Test
+  void should_handle_null_cursus_in_to_dto() {
+    UUID groupId = UUID.randomUUID();
+    JGroup entity = JGroup.builder().id(groupId).ref("G1").cursus(null).build();
+    Group model = new Group(groupId, "G1", null);
+
+    when(groupRepository.findById(groupId)).thenReturn(Optional.of(entity));
+    when(groupMapper.toModel(entity)).thenReturn(model);
+
+    GroupDTO result = groupService.getById(groupId);
+    assertThat(result.cursusIds()).isEmpty();
+  }
 }

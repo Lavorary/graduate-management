@@ -334,4 +334,29 @@ class CourseServiceTest {
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining(courseId.toString());
   }
+
+  @Test
+  void should_handle_null_teachers_in_to_dto() {
+    UUID courseId = UUID.randomUUID();
+    UUID cursusId = UUID.randomUUID();
+
+    JCursus jCursus = jCursus(cursusId);
+    JCourse entity =
+        JCourse.builder()
+            .id(courseId)
+            .cursus(jCursus)
+            .ref("ALG101")
+            .title("Algo")
+            .credit(5)
+            .teachers(null)
+            .build();
+
+    Course model = new Course(courseId, cursusModel(cursusId), "ALG101", "Algo", 5, null);
+
+    when(courseRepository.findById(courseId)).thenReturn(Optional.of(entity));
+    when(courseMapper.toModel(entity)).thenReturn(model);
+
+    CourseDTO result = courseService.getById(courseId);
+    assertThat(result.teacherIds()).isEmpty();
+  }
 }

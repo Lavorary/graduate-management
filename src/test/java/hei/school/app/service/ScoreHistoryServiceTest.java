@@ -8,14 +8,11 @@ import static org.mockito.Mockito.when;
 
 import hei.school.app.DTOs.ScoreHistoryDTO;
 import hei.school.app.enums.Reason;
+import hei.school.app.mapper.GroupMembershipMapper;
 import hei.school.app.mapper.ScoreHistoryMapper;
-import hei.school.app.model.Course;
-import hei.school.app.model.Cursus;
-import hei.school.app.model.Exam;
-import hei.school.app.model.Grade;
-import hei.school.app.model.ScoreHistory;
-import hei.school.app.model.User;
+import hei.school.app.model.*;
 import hei.school.app.repository.GradeRepository;
+import hei.school.app.repository.GroupMembershipRepository;
 import hei.school.app.repository.ScoreHistoryRepository;
 import hei.school.app.repository.model.JGrade;
 import hei.school.app.repository.model.JScoreHistory;
@@ -39,6 +36,9 @@ class ScoreHistoryServiceTest {
   @Mock private GradeRepository gradeRepository;
   @Mock private ScoreHistoryMapper scoreHistoryMapper;
   @InjectMocks private ScoreHistoryService scoreHistoryService;
+  @Mock private GroupMembershipRepository groupMembershipRepository;
+  @Mock private GroupMembershipMapper groupMembershipMapper;
+  @InjectMocks GroupMembershipService groupMembershipService;
 
   private Grade createGradeModel(UUID id) {
     Course course =
@@ -177,5 +177,37 @@ class ScoreHistoryServiceTest {
     when(scoreHistoryRepository.findByGradeIdOrderByGradedAtAsc(gradeId)).thenReturn(List.of());
 
     assertThat(scoreHistoryService.findByGrade(gradeId)).isEmpty();
+  }
+
+  @Test
+  void should_create_score_history_with_correction_reason() {
+    UUID gradeId = UUID.randomUUID();
+    UUID historyId = UUID.randomUUID();
+    BigDecimal score = BigDecimal.valueOf(90.0);
+    Reason reason = Reason.CORRECTION;
+    String explanation = "Corrected after review";
+
+    JGrade jGrade = JGrade.builder().id(gradeId).build();
+    JScoreHistory savedEntity =
+        JScoreHistory.builder()
+            .id(historyId)
+            .grade(jGrade)
+            .score(score)
+            .reason(reason)
+            .explanation(explanation)
+            .build();
+
+    Grade grade = createGradeModel(gradeId);
+    ScoreHistory model =
+        new ScoreHistory(historyId, grade, score, Instant.now(), reason, explanation);
+
+    when(gradeRepository.findById(gradeId)).thenReturn(Optional.of(jGrade));
+    when(scoreHistoryRepository.save(any(JScoreHistory.class))).thenReturn(savedEntity);
+    when(scoreHistoryMapper.toModel(savedEntity)).thenReturn(model);
+
+    ScoreHistoryDTO result = scoreHistoryService.create(gradeId, score, reason, explanation);
+
+    assertThat(result.reason()).isEqualTo(Reason.CORRECTION);
+    assertThat(result.explanation()).isEqualTo(explanation);
   }
 }

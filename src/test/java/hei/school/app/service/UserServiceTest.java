@@ -165,4 +165,18 @@ class UserServiceTest {
 
     assertThat(userService.findByRole(role)).isEmpty();
   }
+
+  @Test
+  void should_get_user_by_id_when_fields_are_null() {
+    UUID id = UUID.randomUUID();
+    JUser entity =
+        JUser.builder().id(id).firstName(null).lastName(null).role(null).email(null).build();
+    User model = new User(id, null, null, null, null, null);
+
+    when(userRepository.findById(id)).thenReturn(Optional.of(entity));
+    when(userMapper.toModel(entity)).thenReturn(model);
+
+    UserDTO result = userService.getById(id);
+    assertThat(result.id()).isEqualTo(id);
+  }
 }

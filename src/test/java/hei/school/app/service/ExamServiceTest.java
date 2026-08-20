@@ -40,7 +40,12 @@ class ExamServiceTest {
     return JCourse.builder()
         .id(id)
         .cursus(
-            JCursus.builder().id(UUID.randomUUID()).name("DevLog").description("d").year("2026").build())
+            JCursus.builder()
+                .id(UUID.randomUUID())
+                .name("DevLog")
+                .description("d")
+                .year("2026")
+                .build())
         .ref("ALG101")
         .title("Algorithmique")
         .credit(5)
@@ -49,7 +54,12 @@ class ExamServiceTest {
 
   private Course courseModel(UUID id) {
     return new Course(
-        id, new Cursus(UUID.randomUUID(), "DevLog", "d", "2026"), "ALG101", "Algorithmique", 5, null);
+        id,
+        new Cursus(UUID.randomUUID(), "DevLog", "d", "2026"),
+        "ALG101",
+        "Algorithmique",
+        5,
+        null);
   }
 
   @Test
@@ -61,7 +71,12 @@ class ExamServiceTest {
 
     JCourse jCourse = jCourse(courseId);
     JExam savedEntity =
-        JExam.builder().id(examId).examDate(examDate).coefficient(coefficient).course(jCourse).build();
+        JExam.builder()
+            .id(examId)
+            .examDate(examDate)
+            .coefficient(coefficient)
+            .course(jCourse)
+            .build();
     Exam model = new Exam(examId, examDate, coefficient, courseModel(courseId));
 
     when(courseRepository.findById(courseId)).thenReturn(Optional.of(jCourse));

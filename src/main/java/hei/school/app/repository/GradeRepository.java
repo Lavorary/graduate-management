@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface GradeRepository extends JpaRepository<JGrade, UUID> {
   List<JGrade> findByStudent_Id(UUID studentId);
@@ -18,4 +19,8 @@ public interface GradeRepository extends JpaRepository<JGrade, UUID> {
 
   @Query("select g.exam.course.id from JGrade g where g.id = :gradeId")
   Optional<UUID> findCourseIdByGradeId(UUID gradeId);
+
+  @Query("SELECT AVG(sh.score) FROM JScoreHistory sh " +
+         "WHERE sh.grade.id IN (SELECT g.id FROM JGrade g WHERE g.student.id = :studentId)")
+  Double findAverageScoreByStudentId(@Param("studentId") UUID studentId);
 }

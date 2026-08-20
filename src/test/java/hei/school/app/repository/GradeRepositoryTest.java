@@ -28,22 +28,12 @@ class GradeRepositoryTest extends FacadeIT {
 
   private JUser saveUser(String email, UserRole role) {
     return userRepository.save(
-        JUser.builder()
-            .id(UUID.randomUUID())
-            .firstName("A")
-            .lastName("B")
-            .role(role)
-            .email(email)
-            .password("x")
-            .build());
+        JUser.builder().id(UUID.randomUUID()).firstName("A").lastName("B").role(role).email(email).password("x").build());
   }
 
-  @Test
-  void should_find_by_student_id_and_graded_by_and_exam_id() {
-    JCursus cursus =
-        cursusRepository.save(
-            JCursus.builder().name("DevLog").description("d").year("2026").build());
-    JUser teacher = saveUser("teacher@hei.school", UserRole.TEACHER);
+  private JGrade saveGrade() {
+    JCursus cursus = cursusRepository.save(JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JUser teacher = saveUser("teacher+" + UUID.randomUUID() + "@hei.school", UserRole.TEACHER);
     JCourse course =
         courseRepository.save(
             JCourse.builder()
@@ -55,19 +45,56 @@ class GradeRepositoryTest extends FacadeIT {
                 .build());
     JExam exam =
         examRepository.save(
-            JExam.builder()
-                .examDate(Instant.parse("2026-06-15T09:00:00Z"))
-                .coefficient(new BigDecimal("2.5"))
-                .course(course)
-                .build());
-    JUser student = saveUser("student@hei.school", UserRole.STUDENT);
+            JExam.builder().examDate(Instant.parse("2026-06-15T09:00:00Z")).coefficient(new BigDecimal("2.5")).course(course).build());
+    JUser student = saveUser("student+" + UUID.randomUUID() + "@hei.school", UserRole.STUDENT);
 
-    JGrade grade =
-        gradeRepository.save(
-            JGrade.builder().exam(exam).student(student).gradedBy(teacher).build());
+    return gradeRepository.save(JGrade.builder().exam(exam).student(student).gradedBy(teacher).build());
+  }
 
-    assertThat(gradeRepository.findByStudent_Id(student.getId())).containsExactly(grade);
-    assertThat(gradeRepository.findByExam_Id(exam.getId())).containsExactly(grade);
-    assertThat(gradeRepository.findByGradedBy_Id(teacher.getId())).containsExactly(grade);
+  @Test
+  void should_find_by_student_id() {
+    JGrade grade = saveGrade();
+
+    assertThat(gradeRepository.findByStudent_Id(grade.getStudent().getId())).containsExactly(grade);
+  }
+
+  @Test
+  void should_find_by_exam_id() {
+    JGrade grade = saveGrade();
+
+    assertThat(gradeRepository.findByExam_Id(grade.getExam().getId())).containsExactly(grade);
+  }
+
+  @Test
+  void should_find_by_graded_by_id() {
+    JGrade grade = saveGrade();
+
+    assertThat(gradeRepository.findByGradedBy_Id(grade.getGradedBy().getId())).containsExactly(grade);
+  }
+
+  @Test
+  void should_return_true_when_grade_belongs_to_student() {
+    JGrade grade = saveGrade();
+
+    assertThat(gradeRepository.existsByIdAndStudentId(grade.getId(), grade.getStudent().getId())).isTrue();
+  }
+
+  @Test
+  void should_return_false_when_grade_does_not_belong_to_student() {
+    JGrade grade = saveGrade();
+
+    assertThat(gradeRepository.existsByIdAndStudentId(grade.getId(), UUID.randomUUID())).isFalse();
+  }
+
+  @Test
+  void should_find_course_id_by_grade_id() {
+    JGrade grade = saveGrade();
+
+    assertThat(gradeRepository.findCourseIdByGradeId(grade.getId())).contains(grade.getExam().getCourse().getId());
+  }
+
+  @Test
+  void should_return_empty_when_grade_does_not_exist_for_course_id() {
+    assertThat(gradeRepository.findCourseIdByGradeId(UUID.randomUUID())).isEmpty();
   }
 }

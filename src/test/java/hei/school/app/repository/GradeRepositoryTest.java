@@ -119,34 +119,34 @@ class GradeRepositoryTest extends FacadeIT {
 
   @Test
   void should_calculate_average_score_for_student() {
-    JCursus cursus = cursusRepository.save(
-        JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JCursus cursus =
+        cursusRepository.save(
+            JCursus.builder().name("DevLog").description("d").year("2026").build());
 
     JUser teacher = saveUser("teacher@hei.school", UserRole.TEACHER);
     JUser student = saveUser("student@hei.school", UserRole.STUDENT);
 
-    JCourse course = courseRepository.save(
-        JCourse.builder()
-            .cursus(cursus)
-            .ref("ALG101")
-            .title("Algorithmique")
-            .credit(5)
-            .teachers(Set.of(teacher))
-            .build());
+    JCourse course =
+        courseRepository.save(
+            JCourse.builder()
+                .cursus(cursus)
+                .ref("ALG101")
+                .title("Algorithmique")
+                .credit(5)
+                .teachers(Set.of(teacher))
+                .build());
 
-    JExam exam = examRepository.save(
-        JExam.builder()
-            .examDate(Instant.now())
-            .coefficient(BigDecimal.ONE)
-            .course(course)
-            .build());
+    JExam exam =
+        examRepository.save(
+            JExam.builder()
+                .examDate(Instant.now())
+                .coefficient(BigDecimal.ONE)
+                .course(course)
+                .build());
 
-    JGrade grade = gradeRepository.save(
-        JGrade.builder()
-            .exam(exam)
-            .student(student)
-            .gradedBy(teacher)
-            .build());
+    JGrade grade =
+        gradeRepository.save(
+            JGrade.builder().exam(exam).student(student).gradedBy(teacher).build());
 
     scoreHistoryRepository.save(
         JScoreHistory.builder()
@@ -173,34 +173,34 @@ class GradeRepositoryTest extends FacadeIT {
 
   @Test
   void should_calculate_average_score_for_student_with_multiple_grades() {
-    JCursus cursus = cursusRepository.save(
-        JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JCursus cursus =
+        cursusRepository.save(
+            JCursus.builder().name("DevLog").description("d").year("2026").build());
 
     JUser teacher = saveUser("teacher@hei.school", UserRole.TEACHER);
     JUser student = saveUser("student@hei.school", UserRole.STUDENT);
 
-    JCourse course1 = courseRepository.save(
-        JCourse.builder()
-            .cursus(cursus)
-            .ref("ALG101")
-            .title("Algorithmique")
-            .credit(5)
-            .teachers(Set.of(teacher))
-            .build());
+    JCourse course1 =
+        courseRepository.save(
+            JCourse.builder()
+                .cursus(cursus)
+                .ref("ALG101")
+                .title("Algorithmique")
+                .credit(5)
+                .teachers(Set.of(teacher))
+                .build());
 
-    JExam exam1 = examRepository.save(
-        JExam.builder()
-            .examDate(Instant.now())
-            .coefficient(BigDecimal.ONE)
-            .course(course1)
-            .build());
+    JExam exam1 =
+        examRepository.save(
+            JExam.builder()
+                .examDate(Instant.now())
+                .coefficient(BigDecimal.ONE)
+                .course(course1)
+                .build());
 
-    JGrade grade1 = gradeRepository.save(
-        JGrade.builder()
-            .exam(exam1)
-            .student(student)
-            .gradedBy(teacher)
-            .build());
+    JGrade grade1 =
+        gradeRepository.save(
+            JGrade.builder().exam(exam1).student(student).gradedBy(teacher).build());
 
     scoreHistoryRepository.save(
         JScoreHistory.builder()
@@ -211,28 +211,27 @@ class GradeRepositoryTest extends FacadeIT {
             .explanation("Algorithmique grade")
             .build());
 
-    JCourse course2 = courseRepository.save(
-        JCourse.builder()
-            .cursus(cursus)
-            .ref("BDD101")
-            .title("Base de données")
-            .credit(5)
-            .teachers(Set.of(teacher))
-            .build());
+    JCourse course2 =
+        courseRepository.save(
+            JCourse.builder()
+                .cursus(cursus)
+                .ref("BDD101")
+                .title("Base de données")
+                .credit(5)
+                .teachers(Set.of(teacher))
+                .build());
 
-    JExam exam2 = examRepository.save(
-        JExam.builder()
-            .examDate(Instant.now())
-            .coefficient(BigDecimal.ONE)
-            .course(course2)
-            .build());
+    JExam exam2 =
+        examRepository.save(
+            JExam.builder()
+                .examDate(Instant.now())
+                .coefficient(BigDecimal.ONE)
+                .course(course2)
+                .build());
 
-    JGrade grade2 = gradeRepository.save(
-        JGrade.builder()
-            .exam(exam2)
-            .student(student)
-            .gradedBy(teacher)
-            .build());
+    JGrade grade2 =
+        gradeRepository.save(
+            JGrade.builder().exam(exam2).student(student).gradedBy(teacher).build());
 
     scoreHistoryRepository.save(
         JScoreHistory.builder()
@@ -268,34 +267,34 @@ class GradeRepositoryTest extends FacadeIT {
 
   @Test
   void should_calculate_average_using_all_score_histories() {
-    JCursus cursus = cursusRepository.save(
-        JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JCursus cursus =
+        cursusRepository.save(
+            JCursus.builder().name("DevLog").description("d").year("2026").build());
 
     JUser teacher = saveUser("teacher@hei.school", UserRole.TEACHER);
     JUser student = saveUser("student@hei.school", UserRole.STUDENT);
 
-    JCourse course = courseRepository.save(
-        JCourse.builder()
-            .cursus(cursus)
-            .ref("ALG101")
-            .title("Algorithmique")
-            .credit(5)
-            .teachers(Set.of(teacher))
-            .build());
+    JCourse course =
+        courseRepository.save(
+            JCourse.builder()
+                .cursus(cursus)
+                .ref("ALG101")
+                .title("Algorithmique")
+                .credit(5)
+                .teachers(Set.of(teacher))
+                .build());
 
-    JExam exam = examRepository.save(
-        JExam.builder()
-            .examDate(Instant.now())
-            .coefficient(BigDecimal.ONE)
-            .course(course)
-            .build());
+    JExam exam =
+        examRepository.save(
+            JExam.builder()
+                .examDate(Instant.now())
+                .coefficient(BigDecimal.ONE)
+                .course(course)
+                .build());
 
-    JGrade grade = gradeRepository.save(
-        JGrade.builder()
-            .exam(exam)
-            .student(student)
-            .gradedBy(teacher)
-            .build());
+    JGrade grade =
+        gradeRepository.save(
+            JGrade.builder().exam(exam).student(student).gradedBy(teacher).build());
 
     scoreHistoryRepository.save(
         JScoreHistory.builder()

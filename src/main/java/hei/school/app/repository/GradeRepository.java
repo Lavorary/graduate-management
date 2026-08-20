@@ -20,7 +20,8 @@ public interface GradeRepository extends JpaRepository<JGrade, UUID> {
   @Query("select g.exam.course.id from JGrade g where g.id = :gradeId")
   Optional<UUID> findCourseIdByGradeId(UUID gradeId);
 
-  @Query("SELECT AVG(sh.score) FROM JScoreHistory sh " +
-         "WHERE sh.grade.id IN (SELECT g.id FROM JGrade g WHERE g.student.id = :studentId)")
+  @Query(
+      "SELECT AVG(sh.score) FROM JScoreHistory sh "
+          + "WHERE sh.grade.id IN (SELECT g.id FROM JGrade g WHERE g.student.id = :studentId)")
   Double findAverageScoreByStudentId(@Param("studentId") UUID studentId);
 }

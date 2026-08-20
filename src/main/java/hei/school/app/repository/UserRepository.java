@@ -14,9 +14,10 @@ public interface UserRepository extends JpaRepository<JUser, UUID> {
 
   List<JUser> findByRole(UserRole role);
 
-  @Query("SELECT DISTINCT u FROM JUser u " +
-         "JOIN JGrade g ON g.student.id = u.id " +
-         "JOIN JExam e ON g.exam.id = e.id " +
-         "WHERE e.course.cursus.id = :cursusId")
+  @Query(
+      "SELECT DISTINCT u FROM JUser u "
+          + "JOIN JGrade g ON g.student.id = u.id "
+          + "JOIN JExam e ON g.exam.id = e.id "
+          + "WHERE e.course.cursus.id = :cursusId")
   List<JUser> findGraduatesByCursusId(@Param("cursusId") UUID cursusId);
 }

@@ -17,4 +17,5 @@ public class EventProducer<T extends PojaEvent> {
           consumers.forEach(consumer -> consumer.accept(event));
         });
   }
+
 }

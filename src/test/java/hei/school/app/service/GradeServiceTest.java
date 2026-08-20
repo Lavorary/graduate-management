@@ -295,4 +295,41 @@ class GradeServiceTest {
 
     assertThat(gradeService.findByTeacher(teacherId)).isEmpty();
   }
+
+  @Test
+  void should_return_true_when_grade_belongs_to_student() {
+    UUID gradeId = UUID.randomUUID();
+    UUID studentId = UUID.randomUUID();
+    when(gradeRepository.existsByIdAndStudentId(gradeId, studentId)).thenReturn(true);
+
+    assertThat(gradeService.belongsToStudent(gradeId, studentId)).isTrue();
+  }
+
+  @Test
+  void should_return_false_when_grade_does_not_belong_to_student() {
+    UUID gradeId = UUID.randomUUID();
+    UUID studentId = UUID.randomUUID();
+    when(gradeRepository.existsByIdAndStudentId(gradeId, studentId)).thenReturn(false);
+
+    assertThat(gradeService.belongsToStudent(gradeId, studentId)).isFalse();
+  }
+
+  @Test
+  void should_get_course_id_of_grade() {
+    UUID gradeId = UUID.randomUUID();
+    UUID courseId = UUID.randomUUID();
+    when(gradeRepository.findCourseIdByGradeId(gradeId)).thenReturn(Optional.of(courseId));
+
+    assertThat(gradeService.getCourseIdOf(gradeId)).isEqualTo(courseId);
+  }
+
+  @Test
+  void should_throw_when_getting_course_id_of_unknown_grade() {
+    UUID gradeId = UUID.randomUUID();
+    when(gradeRepository.findCourseIdByGradeId(gradeId)).thenReturn(Optional.empty());
+
+    assertThatThrownBy(() -> gradeService.getCourseIdOf(gradeId))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining(gradeId.toString());
+  }
 }

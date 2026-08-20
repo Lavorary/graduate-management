@@ -14,7 +14,7 @@ public interface GradeRepository extends JpaRepository<JGrade, UUID> {
 
   List<JGrade> findByGradedBy_Id(UUID teacherId);
 
-   boolean existsByIdAndStudentId(UUID gradeId, UUID studentId);
+  boolean existsByIdAndStudentId(UUID gradeId, UUID studentId);
 
   @Query("select g.exam.course.id from JGrade g where g.id = :gradeId")
   Optional<UUID> findCourseIdByGradeId(UUID gradeId);

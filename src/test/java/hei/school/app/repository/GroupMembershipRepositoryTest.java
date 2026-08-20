@@ -73,33 +73,36 @@ class GroupMembershipRepositoryTest extends FacadeIT {
     assertThat(groupMembershipRepository.findByStudentIdAndEndDateIsNull(student.getId()));
   }
 
-   @Test
+  @Test
   void should_return_true_when_teacher_has_access_to_student() {
     JUser student = saveStudent();
-    JUser teacher = userRepository.save(
-        JUser.builder()
-            .id(UUID.randomUUID())
-            .firstName("Teacher")
-            .lastName("T.")
-            .role(UserRole.TEACHER)
-            .email("teacher+" + UUID.randomUUID() + "@hei.school")
-            .password("x")
-            .build());
+    JUser teacher =
+        userRepository.save(
+            JUser.builder()
+                .id(UUID.randomUUID())
+                .firstName("Teacher")
+                .lastName("T.")
+                .role(UserRole.TEACHER)
+                .email("teacher+" + UUID.randomUUID() + "@hei.school")
+                .password("x")
+                .build());
 
-    JCursus cursus = cursusRepository.save(
-        JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JCursus cursus =
+        cursusRepository.save(
+            JCursus.builder().name("DevLog").description("d").year("2026").build());
 
-    JCourse course = courseRepository.save(
-        JCourse.builder()
-            .cursus(cursus)
-            .ref("ALG101")
-            .title("Algorithmique")
-            .credit(5)
-            .teachers(Set.of(teacher))
-            .build());
+    JCourse course =
+        courseRepository.save(
+            JCourse.builder()
+                .cursus(cursus)
+                .ref("ALG101")
+                .title("Algorithmique")
+                .credit(5)
+                .teachers(Set.of(teacher))
+                .build());
 
-    JGroup group = groupRepository.save(
-        JGroup.builder().ref("GROUPE-A").cursus(Set.of(cursus)).build());
+    JGroup group =
+        groupRepository.save(JGroup.builder().ref("GROUPE-A").cursus(Set.of(cursus)).build());
 
     groupMembershipRepository.save(
         JGroupMembership.builder()
@@ -108,7 +111,8 @@ class GroupMembershipRepositoryTest extends FacadeIT {
             .startDate(LocalDate.of(2023, 9, 1))
             .build());
 
-    boolean result = groupMembershipRepository.existsTeacherAccessToStudent(teacher.getId(), student.getId());
+    boolean result =
+        groupMembershipRepository.existsTeacherAccessToStudent(teacher.getId(), student.getId());
 
     assertThat(result).isTrue();
   }
@@ -116,21 +120,23 @@ class GroupMembershipRepositoryTest extends FacadeIT {
   @Test
   void should_return_false_when_teacher_does_not_have_access_to_student() {
     JUser student = saveStudent();
-    JUser teacher = userRepository.save(
-        JUser.builder()
-            .id(UUID.randomUUID())
-            .firstName("Teacher")
-            .lastName("T.")
-            .role(UserRole.TEACHER)
-            .email("teacher+" + UUID.randomUUID() + "@hei.school")
-            .password("x")
-            .build());
+    JUser teacher =
+        userRepository.save(
+            JUser.builder()
+                .id(UUID.randomUUID())
+                .firstName("Teacher")
+                .lastName("T.")
+                .role(UserRole.TEACHER)
+                .email("teacher+" + UUID.randomUUID() + "@hei.school")
+                .password("x")
+                .build());
 
-    JCursus cursus = cursusRepository.save(
-        JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JCursus cursus =
+        cursusRepository.save(
+            JCursus.builder().name("DevLog").description("d").year("2026").build());
 
-    JGroup group = groupRepository.save(
-        JGroup.builder().ref("GROUPE-A").cursus(Set.of(cursus)).build());
+    JGroup group =
+        groupRepository.save(JGroup.builder().ref("GROUPE-A").cursus(Set.of(cursus)).build());
 
     groupMembershipRepository.save(
         JGroupMembership.builder()
@@ -139,20 +145,22 @@ class GroupMembershipRepositoryTest extends FacadeIT {
             .startDate(LocalDate.of(2023, 9, 1))
             .build());
 
-    boolean result = groupMembershipRepository.existsTeacherAccessToStudent(teacher.getId(), student.getId());
+    boolean result =
+        groupMembershipRepository.existsTeacherAccessToStudent(teacher.getId(), student.getId());
 
     assertThat(result).isFalse();
   }
 
-    @Test
+  @Test
   void should_return_true_when_student_has_active_membership_for_cursus() {
     JUser student = saveStudent();
 
-    JCursus cursus = cursusRepository.save(
-        JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JCursus cursus =
+        cursusRepository.save(
+            JCursus.builder().name("DevLog").description("d").year("2026").build());
 
-    JGroup group = groupRepository.save(
-        JGroup.builder().ref("GROUPE-A").cursus(Set.of(cursus)).build());
+    JGroup group =
+        groupRepository.save(JGroup.builder().ref("GROUPE-A").cursus(Set.of(cursus)).build());
 
     groupMembershipRepository.save(
         JGroupMembership.builder()
@@ -161,7 +169,8 @@ class GroupMembershipRepositoryTest extends FacadeIT {
             .startDate(LocalDate.of(2023, 9, 1))
             .build());
 
-    boolean result = groupMembershipRepository.existsByStudentIdAndCursusId(student.getId(), cursus.getId());
+    boolean result =
+        groupMembershipRepository.existsByStudentIdAndCursusId(student.getId(), cursus.getId());
 
     assertThat(result).isTrue();
   }
@@ -170,10 +179,12 @@ class GroupMembershipRepositoryTest extends FacadeIT {
   void should_return_false_when_student_has_no_membership_for_cursus() {
     JUser student = saveStudent();
 
-    JCursus cursus = cursusRepository.save(
-        JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JCursus cursus =
+        cursusRepository.save(
+            JCursus.builder().name("DevLog").description("d").year("2026").build());
 
-    boolean result = groupMembershipRepository.existsByStudentIdAndCursusId(student.getId(), cursus.getId());
+    boolean result =
+        groupMembershipRepository.existsByStudentIdAndCursusId(student.getId(), cursus.getId());
 
     assertThat(result).isFalse();
   }
@@ -182,11 +193,12 @@ class GroupMembershipRepositoryTest extends FacadeIT {
   void should_return_false_when_student_has_expired_membership_for_cursus() {
     JUser student = saveStudent();
 
-    JCursus cursus = cursusRepository.save(
-        JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JCursus cursus =
+        cursusRepository.save(
+            JCursus.builder().name("DevLog").description("d").year("2026").build());
 
-    JGroup group = groupRepository.save(
-        JGroup.builder().ref("GROUPE-A").cursus(Set.of(cursus)).build());
+    JGroup group =
+        groupRepository.save(JGroup.builder().ref("GROUPE-A").cursus(Set.of(cursus)).build());
 
     groupMembershipRepository.save(
         JGroupMembership.builder()
@@ -196,7 +208,8 @@ class GroupMembershipRepositoryTest extends FacadeIT {
             .endDate(LocalDate.of(2023, 1, 1))
             .build());
 
-    boolean result = groupMembershipRepository.existsByStudentIdAndCursusId(student.getId(), cursus.getId());
+    boolean result =
+        groupMembershipRepository.existsByStudentIdAndCursusId(student.getId(), cursus.getId());
 
     assertThat(result).isFalse();
   }
@@ -205,15 +218,17 @@ class GroupMembershipRepositoryTest extends FacadeIT {
   void should_find_cursus_ids_for_student() {
     JUser student = saveStudent();
 
-    JCursus cursus1 = cursusRepository.save(
-        JCursus.builder().name("DevLog").description("d").year("2026").build());
-    JCursus cursus2 = cursusRepository.save(
-        JCursus.builder().name("MathLog").description("m").year("2026").build());
+    JCursus cursus1 =
+        cursusRepository.save(
+            JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JCursus cursus2 =
+        cursusRepository.save(
+            JCursus.builder().name("MathLog").description("m").year("2026").build());
 
-    JGroup group1 = groupRepository.save(
-        JGroup.builder().ref("GROUPE-A").cursus(Set.of(cursus1)).build());
-    JGroup group2 = groupRepository.save(
-        JGroup.builder().ref("GROUPE-B").cursus(Set.of(cursus2)).build());
+    JGroup group1 =
+        groupRepository.save(JGroup.builder().ref("GROUPE-A").cursus(Set.of(cursus1)).build());
+    JGroup group2 =
+        groupRepository.save(JGroup.builder().ref("GROUPE-B").cursus(Set.of(cursus2)).build());
 
     groupMembershipRepository.save(
         JGroupMembership.builder()

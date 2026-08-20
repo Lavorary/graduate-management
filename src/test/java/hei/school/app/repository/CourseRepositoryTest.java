@@ -7,7 +7,6 @@ import hei.school.app.repository.model.JCourse;
 import hei.school.app.repository.model.JCursus;
 import hei.school.app.repository.model.JUser;
 import hei.school.app.security.model.UserRole;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -102,14 +101,19 @@ class CourseRepositoryTest extends FacadeIT {
     assertThat(result).isTrue();
   }
 
-    @Test
+  @Test
   void should_find_cursus_id_by_course_id() {
     JCursus cursus =
         cursusRepository.save(
             JCursus.builder().name("DevLog").description("d").year("2026").build());
     JCourse course =
         courseRepository.save(
-            JCourse.builder().cursus(cursus).ref("ALG101").title("Algorithmique").credit(5).build());
+            JCourse.builder()
+                .cursus(cursus)
+                .ref("ALG101")
+                .title("Algorithmique")
+                .credit(5)
+                .build());
 
     Optional<UUID> result = courseRepository.findCursusIdByCourseId(course.getId());
 
@@ -117,7 +121,7 @@ class CourseRepositoryTest extends FacadeIT {
     assertThat(result.get()).isEqualTo(cursus.getId());
   }
 
-    @Test
+  @Test
   void should_find_all_taught_by_teacher_id() {
     JCursus cursus =
         cursusRepository.save(
@@ -146,7 +150,7 @@ class CourseRepositoryTest extends FacadeIT {
     assertThat(result).hasSize(1);
   }
 
-    @Test
+  @Test
   void should_find_all_by_cursus_ids_in() {
     JCursus cursus1 =
         cursusRepository.save(
@@ -160,7 +164,8 @@ class CourseRepositoryTest extends FacadeIT {
     courseRepository.save(
         JCourse.builder().cursus(cursus2).ref("MATH101").title("Mathematics").credit(4).build());
 
-    List<JCourse> result = courseRepository.findAllByCursusIdIn(List.of(cursus1.getId(), cursus2.getId()));
+    List<JCourse> result =
+        courseRepository.findAllByCursusIdIn(List.of(cursus1.getId(), cursus2.getId()));
 
     assertThat(result).hasSize(2);
   }

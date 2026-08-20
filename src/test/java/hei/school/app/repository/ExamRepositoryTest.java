@@ -31,9 +31,17 @@ class ExamRepositoryTest extends FacadeIT {
 
   @Test
   void should_find_by_course_id() {
-    JCursus cursus = cursusRepository.save(JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JCursus cursus =
+        cursusRepository.save(
+            JCursus.builder().name("DevLog").description("d").year("2026").build());
     JCourse course =
-        courseRepository.save(JCourse.builder().cursus(cursus).ref("ALG101").title("Algorithmique").credit(5).build());
+        courseRepository.save(
+            JCourse.builder()
+                .cursus(cursus)
+                .ref("ALG101")
+                .title("Algorithmique")
+                .credit(5)
+                .build());
     saveExam(course);
 
     assertThat(examRepository.findByCourseId(course.getId())).hasSize(1);
@@ -41,9 +49,17 @@ class ExamRepositoryTest extends FacadeIT {
 
   @Test
   void should_find_course_id_by_exam_id() {
-    JCursus cursus = cursusRepository.save(JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JCursus cursus =
+        cursusRepository.save(
+            JCursus.builder().name("DevLog").description("d").year("2026").build());
     JCourse course =
-        courseRepository.save(JCourse.builder().cursus(cursus).ref("ALG101").title("Algorithmique").credit(5).build());
+        courseRepository.save(
+            JCourse.builder()
+                .cursus(cursus)
+                .ref("ALG101")
+                .title("Algorithmique")
+                .credit(5)
+                .build());
     JExam exam = saveExam(course);
 
     assertThat(examRepository.findCourseIdByExamId(exam.getId())).contains(course.getId());
@@ -56,9 +72,17 @@ class ExamRepositoryTest extends FacadeIT {
 
   @Test
   void should_find_cursus_id_by_exam_id() {
-    JCursus cursus = cursusRepository.save(JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JCursus cursus =
+        cursusRepository.save(
+            JCursus.builder().name("DevLog").description("d").year("2026").build());
     JCourse course =
-        courseRepository.save(JCourse.builder().cursus(cursus).ref("ALG101").title("Algorithmique").credit(5).build());
+        courseRepository.save(
+            JCourse.builder()
+                .cursus(cursus)
+                .ref("ALG101")
+                .title("Algorithmique")
+                .credit(5)
+                .build());
     JExam exam = saveExam(course);
 
     assertThat(examRepository.findCursusIdByExamId(exam.getId())).contains(cursus.getId());

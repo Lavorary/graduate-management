@@ -15,31 +15,31 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class TranscriptServiceTest {
 
-    @Mock private UserRepository userRepository;
-    @InjectMocks private TranscriptService transcriptService;
+  @Mock private UserRepository userRepository;
+  @InjectMocks private TranscriptService transcriptService;
 
-    @Test
-    void should_pass_when_student_exists() {
-        // Given
-        UUID studentId = UUID.randomUUID();
-        when(userRepository.existsById(studentId)).thenReturn(true);
+  @Test
+  void should_pass_when_student_exists() {
+    // Given
+    UUID studentId = UUID.randomUUID();
+    when(userRepository.existsById(studentId)).thenReturn(true);
 
-        // When
-        transcriptService.requestTranscript(studentId);
+    // When
+    transcriptService.requestTranscript(studentId);
 
-        // Then
-        verify(userRepository).existsById(studentId);
-    }
+    // Then
+    verify(userRepository).existsById(studentId);
+  }
 
-    @Test
-    void should_throw_when_student_not_found() {
-        // Given
-        UUID studentId = UUID.randomUUID();
-        when(userRepository.existsById(studentId)).thenReturn(false);
+  @Test
+  void should_throw_when_student_not_found() {
+    // Given
+    UUID studentId = UUID.randomUUID();
+    when(userRepository.existsById(studentId)).thenReturn(false);
 
-        // Then
-        assertThatThrownBy(() -> transcriptService.requestTranscript(studentId))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Student with Id : " + studentId + " not found");
-    }
+    // Then
+    assertThatThrownBy(() -> transcriptService.requestTranscript(studentId))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Student with Id : " + studentId + " not found");
+  }
 }

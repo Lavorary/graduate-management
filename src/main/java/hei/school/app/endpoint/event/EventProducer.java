@@ -9,11 +9,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class EventProducer<T extends PojaEvent> {
 
-    private final List<EventConsumer<T>> consumers;
+  private final List<EventConsumer<T>> consumers;
 
-    public void accept(List<T> events) {
-        events.forEach(event -> {
-            consumers.forEach(consumer -> consumer.accept(event));
+  public void accept(List<T> events) {
+    events.forEach(
+        event -> {
+          consumers.forEach(consumer -> consumer.accept(event));
         });
-    }
+  }
 }

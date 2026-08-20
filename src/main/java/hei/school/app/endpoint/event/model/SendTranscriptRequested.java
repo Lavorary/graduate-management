@@ -16,15 +16,15 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = false)
 @ToString
 public class SendTranscriptRequested extends PojaEvent {
-    private UUID studentId;
+  private UUID studentId;
 
-    @Override
-    public Duration maxConsumerDuration() {
-        return Duration.ofSeconds(120);
-    }
+  @Override
+  public Duration maxConsumerDuration() {
+    return Duration.ofSeconds(120);
+  }
 
-    @Override
-    public Duration maxConsumerBackoffBetweenRetries() {
-        return Duration.ofSeconds(60);
-    }
+  @Override
+  public Duration maxConsumerBackoffBetweenRetries() {
+    return Duration.ofSeconds(60);
+  }
 }

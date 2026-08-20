@@ -21,37 +21,33 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/transcripts")
 @AllArgsConstructor
 public class TranscriptController {
-    private final UserService userService;
-    private final EventProducer<SendTranscriptRequested> eventProducer;
+  private final UserService userService;
+  private final EventProducer<SendTranscriptRequested> eventProducer;
 
-    @PostMapping("/{studentId}")
-    @SneakyThrows
-    public ResponseEntity<Void> sendTranscript(
-            @PathVariable UUID studentId,
-            Authentication authentication) {
+  @PostMapping("/{studentId}")
+  @SneakyThrows
+  public ResponseEntity<Void> sendTranscript(
+      @PathVariable UUID studentId, Authentication authentication) {
 
-        UserDTO requester = userService.getByEmail(authentication.getName());
+    UserDTO requester = userService.getByEmail(authentication.getName());
 
-        boolean isSelf = requester.id().equals(studentId);
-        boolean isAdmin = requester.role() == UserRole.ADMIN;
+    boolean isSelf = requester.id().equals(studentId);
+    boolean isAdmin = requester.role() == UserRole.ADMIN;
 
-        if (!isSelf && !isAdmin) {
-            throw new AccessDeniedException("You are not allowed to request this transcript");
-        }
-
-        try {
-            userService.getById(studentId);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Student with Id : " + studentId + " not found");
-        }
-
-
-        var event = SendTranscriptRequested.builder()
-            .studentId(studentId)
-            .build();
-
-        eventProducer.accept(List.of(event));
-
-        return ResponseEntity.accepted().build();
+    if (!isSelf && !isAdmin) {
+      throw new AccessDeniedException("You are not allowed to request this transcript");
     }
+
+    try {
+      userService.getById(studentId);
+    } catch (Exception e) {
+      throw new IllegalArgumentException("Student with Id : " + studentId + " not found");
+    }
+
+    var event = SendTranscriptRequested.builder().studentId(studentId).build();
+
+    eventProducer.accept(List.of(event));
+
+    return ResponseEntity.accepted().build();
+  }
 }

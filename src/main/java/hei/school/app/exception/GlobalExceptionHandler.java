@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex) {
     return build(HttpStatus.UNAUTHORIZED, "Authentication failed: " + ex.getMessage());
   }
-  
+
   @ExceptionHandler(IllegalArgumentException.class)
   public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex) {
     return build(HttpStatus.NOT_FOUND, ex.getMessage());

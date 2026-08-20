@@ -20,7 +20,6 @@ class GroupMembershipRepositoryTest extends FacadeIT {
   @Autowired private GroupRepository groupRepository;
   @Autowired private UserRepository userRepository;
   @Autowired private CursusRepository cursusRepository;
-  @Autowired private CourseRepository courseRepository;
 
   private JUser saveStudent() {
     return userRepository.save(
@@ -90,16 +89,6 @@ class GroupMembershipRepositoryTest extends FacadeIT {
     JCursus cursus =
         cursusRepository.save(
             JCursus.builder().name("DevLog").description("d").year("2026").build());
-
-    JCourse course =
-        courseRepository.save(
-            JCourse.builder()
-                .cursus(cursus)
-                .ref("ALG101")
-                .title("Algorithmique")
-                .credit(5)
-                .teachers(Set.of(teacher))
-                .build());
 
     JGroup group =
         groupRepository.save(JGroup.builder().ref("GROUPE-A").cursus(Set.of(cursus)).build());

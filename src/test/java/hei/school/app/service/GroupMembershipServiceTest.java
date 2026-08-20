@@ -241,10 +241,9 @@ class GroupMembershipServiceTest {
         .thenReturn(List.of(entity));
     when(groupMembershipMapper.toModel(entity)).thenReturn(model);
 
-    List<GroupMembershipDTO> results = groupMembershipService.findActiveByStudent(studentId);
-    assertThat(results).hasSize(1);
-    assertThat(results.get(0).studentId()).isEqualTo(studentId);
-    assertThat(results.get(0).groupId()).isEqualTo(groupId);
+    Optional<GroupMembership> results = groupMembershipService.findActiveByStudent(studentId);
+    assertThat(results.orElseThrow(null).student().id()).isEqualTo(studentId);
+    assertThat(results.orElseThrow(null).group().id()).isEqualTo(groupId);
   }
 
   @Test

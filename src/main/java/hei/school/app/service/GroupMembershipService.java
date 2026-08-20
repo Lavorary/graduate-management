@@ -11,9 +11,11 @@ import hei.school.app.repository.model.JGroupMembership;
 import hei.school.app.repository.model.JUser;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -65,10 +67,10 @@ public class GroupMembershipService {
         .toList();
   }
 
-  public List<GroupMembershipDTO> findActiveByStudent(UUID studentId) {
+  public Optional<GroupMembership> findActiveByStudent(UUID studentId) {
     return groupMembershipRepository.findByStudentIdAndEndDateIsNull(studentId).stream()
-        .map(this::toDto)
-        .toList();
+        .findFirst()
+        .map(groupMembershipMapper::toModel);
   }
 
   public List<GroupMembershipDTO> findByGroup(UUID groupId) {
@@ -96,5 +98,10 @@ public class GroupMembershipService {
         .studentId(model.student().id())
         .groupId(model.group().id())
         .build();
+  }
+
+  @Transactional(readOnly = true)
+  public List<JUser> getActiveStudentsByCursusId(UUID cursusId) {
+    return groupMembershipRepository.findActiveStudentsByCursusId(cursusId);
   }
 }

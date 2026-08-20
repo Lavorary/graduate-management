@@ -7,7 +7,6 @@ import hei.school.app.repository.model.JCourse;
 import hei.school.app.repository.model.JCursus;
 import hei.school.app.repository.model.JUser;
 import hei.school.app.security.model.UserRole;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;

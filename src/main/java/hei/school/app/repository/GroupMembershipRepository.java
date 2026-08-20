@@ -1,6 +1,7 @@
 package hei.school.app.repository;
 
 import hei.school.app.repository.model.JGroupMembership;
+import hei.school.app.repository.model.JUser;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -48,4 +49,9 @@ public interface GroupMembershipRepository extends JpaRepository<JGroupMembershi
         and (gm.endDate is null or gm.endDate > current_date)
       """)
   List<UUID> findCursusIdsForStudent(UUID studentId);
+
+  @Query(
+      "SELECT gm.user FROM JGroupMembership gm WHERE gm.group.cursus.id = :cursusId AND gm.endDate"
+          + " IS NULL")
+  List<JUser> findActiveStudentsByCursusId(UUID cursusId);
 }

@@ -8,9 +8,7 @@ import hei.school.app.repository.model.JCursus;
 import hei.school.app.repository.model.JExam;
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.Optional;
 import java.util.UUID;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,81 +20,52 @@ class ExamRepositoryTest extends FacadeIT {
   @Autowired private CourseRepository courseRepository;
   @Autowired private CursusRepository cursusRepository;
 
-  @Test
-  void should_find_by_course_id() {
-    JCursus cursus =
-        cursusRepository.save(
-            JCursus.builder().name("DevLog").description("d").year("2026").build());
-    JCourse course =
-        courseRepository.save(
-            JCourse.builder()
-                .cursus(cursus)
-                .ref("ALG101")
-                .title("Algorithmique")
-                .credit(5)
-                .build());
-    examRepository.save(
+  private JExam saveExam(JCourse course) {
+    return examRepository.save(
         JExam.builder()
             .examDate(Instant.parse("2026-06-15T09:00:00Z"))
             .coefficient(new BigDecimal("2.5"))
             .course(course)
             .build());
+  }
+
+  @Test
+  void should_find_by_course_id() {
+    JCursus cursus = cursusRepository.save(JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JCourse course =
+        courseRepository.save(JCourse.builder().cursus(cursus).ref("ALG101").title("Algorithmique").credit(5).build());
+    saveExam(course);
 
     assertThat(examRepository.findByCourseId(course.getId())).hasSize(1);
   }
 
   @Test
   void should_find_course_id_by_exam_id() {
-    JCursus cursus =
-        cursusRepository.save(
-            JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JCursus cursus = cursusRepository.save(JCursus.builder().name("DevLog").description("d").year("2026").build());
     JCourse course =
-        courseRepository.save(
-            JCourse.builder()
-                .cursus(cursus)
-                .ref("ALG101")
-                .title("Algorithmique")
-                .credit(5)
-                .build());
-    JExam exam =
-        examRepository.save(
-            JExam.builder()
-                .examDate(Instant.parse("2026-06-15T09:00:00Z"))
-                .coefficient(new BigDecimal("2.5"))
-                .course(course)
-                .build());
+        courseRepository.save(JCourse.builder().cursus(cursus).ref("ALG101").title("Algorithmique").credit(5).build());
+    JExam exam = saveExam(course);
 
-    Optional<UUID> result = examRepository.findCourseIdByExamId(exam.getId());
-
-    assertThat(result).isPresent();
-    assertThat(result.get()).isEqualTo(course.getId());
+    assertThat(examRepository.findCourseIdByExamId(exam.getId())).contains(course.getId());
   }
 
-   @Test
+  @Test
+  void should_return_empty_when_exam_does_not_exist_for_course_id() {
+    assertThat(examRepository.findCourseIdByExamId(UUID.randomUUID())).isEmpty();
+  }
+
+  @Test
   void should_find_cursus_id_by_exam_id() {
-    JCursus cursus =
-        cursusRepository.save(
-            JCursus.builder().name("DevLog").description("d").year("2026").build());
+    JCursus cursus = cursusRepository.save(JCursus.builder().name("DevLog").description("d").year("2026").build());
     JCourse course =
-        courseRepository.save(
-            JCourse.builder()
-                .cursus(cursus)
-                .ref("ALG101")
-                .title("Algorithmique")
-                .credit(5)
-                .build());
-    JExam exam =
-        examRepository.save(
-            JExam.builder()
-                .examDate(Instant.parse("2026-06-15T09:00:00Z"))
-                .coefficient(new BigDecimal("2.5"))
-                .course(course)
-                .build());
+        courseRepository.save(JCourse.builder().cursus(cursus).ref("ALG101").title("Algorithmique").credit(5).build());
+    JExam exam = saveExam(course);
 
-    Optional<UUID> result = examRepository.findCursusIdByExamId(exam.getId());
-
-    assertThat(result).isPresent();
-    assertThat(result.get()).isEqualTo(cursus.getId());
+    assertThat(examRepository.findCursusIdByExamId(exam.getId())).contains(cursus.getId());
   }
 
+  @Test
+  void should_return_empty_when_exam_does_not_exist_for_cursus_id() {
+    assertThat(examRepository.findCursusIdByExamId(UUID.randomUUID())).isEmpty();
+  }
 }
